@@ -15,6 +15,13 @@ import { Dashboard } from './pages/Dashboard';
 import { Deposit } from './pages/Deposit';
 import { Withdraw } from './pages/Withdraw';
 import { Investment } from './pages/Investment';
+import { Profile } from './pages/Profile';
+import { Tasks } from './pages/Tasks';
+import { History } from './pages/History';
+import { Team } from './pages/Team';
+import { BuyPoints } from './pages/BuyPoints';
+import { ExchangePoints } from './pages/ExchangePoints';
+import { FAQ } from './pages/FAQ';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -104,10 +111,7 @@ function App() {
                   path="/profile" 
                   element={
                     <ProtectedRoute>
-                      <div className="text-center py-12">
-                        <h2 className="text-2xl font-bold text-gray-900 mb-4">Profil Utilisateur</h2>
-                        <p className="text-gray-600">Gestion du profil à venir...</p>
-                      </div>
+                      <Profile />
                     </ProtectedRoute>
                   } 
                 />
@@ -115,10 +119,7 @@ function App() {
                   path="/tasks" 
                   element={
                     <ProtectedRoute>
-                      <div className="text-center py-12">
-                        <h2 className="text-2xl font-bold text-gray-900 mb-4">Micro-tâches</h2>
-                        <p className="text-gray-600">Système de missions et points à venir...</p>
-                      </div>
+                      <Tasks />
                     </ProtectedRoute>
                   } 
                 />
@@ -126,10 +127,7 @@ function App() {
                   path="/team" 
                   element={
                     <ProtectedRoute>
-                      <div className="text-center py-12">
-                        <h2 className="text-2xl font-bold text-gray-900 mb-4">Mon Équipe</h2>
-                        <p className="text-gray-600">Visualisation du réseau de parrainage à venir...</p>
-                      </div>
+                      <Team />
                     </ProtectedRoute>
                   } 
                 />
@@ -137,10 +135,31 @@ function App() {
                   path="/history" 
                   element={
                     <ProtectedRoute>
-                      <div className="text-center py-12">
-                        <h2 className="text-2xl font-bold text-gray-900 mb-4">Historique</h2>
-                        <p className="text-gray-600">Historique des transactions à venir...</p>
-                      </div>
+                      <History />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/buy-points" 
+                  element={
+                    <ProtectedRoute>
+                      <BuyPoints />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/exchange-points" 
+                  element={
+                    <ProtectedRoute>
+                      <ExchangePoints />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route 
+                  path="/faq" 
+                  element={
+                    <ProtectedRoute>
+                      <FAQ />
                     </ProtectedRoute>
                   } 
                 />
