@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { AdminProvider } from './contexts/AdminContext';
 import { LanguageProvider } from './contexts/LanguageContext';
 import { NotificationProvider } from './contexts/NotificationContext';
 import { Header } from './components/layout/Header';
@@ -22,6 +23,12 @@ import { Team } from './pages/Team';
 import { BuyPoints } from './pages/BuyPoints';
 import { ExchangePoints } from './pages/ExchangePoints';
 import { FAQ } from './pages/FAQ';
+
+// Admin Pages
+import { AdminLogin } from './pages/admin/AdminLogin';
+import { AdminLayout } from './pages/admin/AdminLayout';
+import { AdminDashboard } from './pages/admin/AdminDashboard';
+import { AdminUsers } from './pages/admin/AdminUsers';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -67,126 +74,141 @@ function AppLayout({ children }: { children: React.ReactNode }) {
 function App() {
   return (
     <Router>
-      <AuthProvider>
-        <LanguageProvider>
-          <NotificationProvider>
-            <AppLayout>
+      <AdminProvider>
+        <AuthProvider>
+          <LanguageProvider>
+            <NotificationProvider>
               <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route 
-                  path="/dashboard" 
-                  element={
-                    <ProtectedRoute>
-                      <Dashboard />
-                    </ProtectedRoute>
-                  } 
-                />
-                <Route 
-                  path="/deposit" 
-                  element={
-                    <ProtectedRoute>
-                      <Deposit />
-                    </ProtectedRoute>
-                  } 
-                />
-                <Route 
-                  path="/withdraw" 
-                  element={
-                    <ProtectedRoute>
-                      <Withdraw />
-                    </ProtectedRoute>
-                  } 
-                />
-                <Route 
-                  path="/invest" 
-                  element={
-                    <ProtectedRoute>
-                      <Investment />
-                    </ProtectedRoute>
-                  } 
-                />
-                <Route 
-                  path="/profile" 
-                  element={
-                    <ProtectedRoute>
-                      <Profile />
-                    </ProtectedRoute>
-                  } 
-                />
-                <Route 
-                  path="/tasks" 
-                  element={
-                    <ProtectedRoute>
-                      <Tasks />
-                    </ProtectedRoute>
-                  } 
-                />
-                <Route 
-                  path="/team" 
-                  element={
-                    <ProtectedRoute>
-                      <Team />
-                    </ProtectedRoute>
-                  } 
-                />
-                <Route 
-                  path="/history" 
-                  element={
-                    <ProtectedRoute>
-                      <History />
-                    </ProtectedRoute>
-                  } 
-                />
-                <Route 
-                  path="/buy-points" 
-                  element={
-                    <ProtectedRoute>
-                      <BuyPoints />
-                    </ProtectedRoute>
-                  } 
-                />
-                <Route 
-                  path="/exchange-points" 
-                  element={
-                    <ProtectedRoute>
-                      <ExchangePoints />
-                    </ProtectedRoute>
-                  } 
-                />
-                <Route 
-                  path="/faq" 
-                  element={
-                    <ProtectedRoute>
-                      <FAQ />
-                    </ProtectedRoute>
-                  } 
-                />
-                {/* Catch all route */}
-                <Route path="*" element={<Navigate to="/" replace />} />
+                {/* Admin Routes */}
+                <Route path="/admin/login" element={<AdminLogin />} />
+                <Route path="/admin/*" element={<AdminLayout />}>
+                  <Route path="dashboard" element={<AdminDashboard />} />
+                  <Route path="users" element={<AdminUsers />} />
+                  <Route index element={<Navigate to="dashboard" replace />} />
+                </Route>
+                
+                {/* User Routes */}
+                <Route path="/*" element={
+                  <AppLayout>
+                    <Routes>
+                      <Route path="/" element={<Home />} />
+                      <Route path="/login" element={<Login />} />
+                      <Route path="/register" element={<Register />} />
+                      <Route 
+                        path="/dashboard" 
+                        element={
+                          <ProtectedRoute>
+                            <Dashboard />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/deposit" 
+                        element={
+                          <ProtectedRoute>
+                            <Deposit />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/withdraw" 
+                        element={
+                          <ProtectedRoute>
+                            <Withdraw />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/invest" 
+                        element={
+                          <ProtectedRoute>
+                            <Investment />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/profile" 
+                        element={
+                          <ProtectedRoute>
+                            <Profile />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/tasks" 
+                        element={
+                          <ProtectedRoute>
+                            <Tasks />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/team" 
+                        element={
+                          <ProtectedRoute>
+                            <Team />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/history" 
+                        element={
+                          <ProtectedRoute>
+                            <History />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/buy-points" 
+                        element={
+                          <ProtectedRoute>
+                            <BuyPoints />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/exchange-points" 
+                        element={
+                          <ProtectedRoute>
+                            <ExchangePoints />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/faq" 
+                        element={
+                          <ProtectedRoute>
+                            <FAQ />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route path="*" element={<Navigate to="/" replace />} />
+                    </Routes>
+                  </AppLayout>
+                } />
               </Routes>
-            </AppLayout>
-          </NotificationProvider>
-          <Toaster
-            position="top-right"
-            toastOptions={{
-              duration: 4000,
-              style: {
-                background: '#363636',
-                color: '#fff',
-              },
-              success: {
-                duration: 3000,
-                iconTheme: {
-                  primary: '#10B981',
-                  secondary: '#fff',
-                },
-              },
-            }}
-          />
-        </LanguageProvider>
-      </AuthProvider>
+              
+              <Toaster
+                position="top-right"
+                toastOptions={{
+                  duration: 4000,
+                  style: {
+                    background: '#363636',
+                    color: '#fff',
+                  },
+                  success: {
+                    duration: 3000,
+                    iconTheme: {
+                      primary: '#10B981',
+                      secondary: '#fff',
+                    },
+                  },
+                }}
+              />
+            </NotificationProvider>
+          </LanguageProvider>
+        </AuthProvider>
+      </AdminProvider>
     </Router>
   );
 }
