@@ -29,6 +29,10 @@ import { AdminLogin } from './pages/admin/AdminLogin';
 import { AdminLayout } from './pages/admin/AdminLayout';
 import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { AdminUsers } from './pages/admin/AdminUsers';
+import { AdminDeposits } from './pages/admin/AdminDeposits';
+import { AdminWithdrawals } from './pages/admin/AdminWithdrawals';
+import { AdminSettings } from './pages/admin/AdminSettings';
+import { AdminTasks } from './pages/admin/AdminTasks';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -84,6 +88,10 @@ function App() {
                 <Route path="/admin/*" element={<AdminLayout />}>
                   <Route path="dashboard" element={<AdminDashboard />} />
                   <Route path="users" element={<AdminUsers />} />
+                  <Route path="deposits" element={<AdminDeposits />} />
+                  <Route path="withdrawals" element={<AdminWithdrawals />} />
+                  <Route path="settings" element={<AdminSettings />} />
+                  <Route path="tasks" element={<AdminTasks />} />
                   <Route index element={<Navigate to="dashboard" replace />} />
                 </Route>
                 
