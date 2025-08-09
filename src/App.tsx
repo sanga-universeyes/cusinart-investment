@@ -190,6 +190,22 @@ function App() {
                           </ProtectedRoute>
                         } 
                       />
+                      <Route 
+                        path="/company-profile" 
+                        element={
+                          <ProtectedRoute>
+                            <CompanyProfile />
+                          </ProtectedRoute>
+                        } 
+                      />
+                      <Route 
+                        path="/earnings" 
+                        element={
+                          <ProtectedRoute>
+                            <Earnings />
+                          </ProtectedRoute>
+                        } 
+                      />
                       <Route path="*" element={<Navigate to="/" replace />} />
                     </Routes>
                   </AppLayout>

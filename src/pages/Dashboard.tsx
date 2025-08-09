@@ -159,8 +159,8 @@ export function Dashboard() {
 
       {/* Balance Cards */}
       <div className="grid md:grid-cols-3 gap-6">
-        <Card hover className="relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/10 to-transparent rounded-full -mr-16 -mt-16"></div>
+        <Card hover className="relative overflow-hidden card-hover">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/20 to-transparent rounded-full -mr-16 -mt-16"></div>
           <div className="relative">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-sm font-medium text-gray-600">
@@ -168,16 +168,16 @@ export function Dashboard() {
               </h3>
               <Wallet className="h-5 w-5 text-blue-500" />
             </div>
-            <p className="text-2xl font-bold text-gray-900">
+            <p className="text-3xl font-bold text-gray-900 gradient-text">
               {formatCurrency(getDisplayAmount(user.balanceAr, user.balanceUsdt), getDisplayCurrency())}
             </p>
-            <p className="text-sm text-green-600 mt-2">+5.2% ce mois</p>
-            <div className="mt-3 flex space-x-2">
+            <p className="text-sm text-green-600 mt-2 font-medium">+5.2% ce mois</p>
+            <div className="mt-4 flex space-x-2">
               <Button 
                 size="sm" 
                 variant="outline" 
                 onClick={() => navigate('/withdraw')}
-                className="text-xs"
+                className="text-xs btn-relief"
               >
                 Retrait
               </Button>
@@ -185,7 +185,7 @@ export function Dashboard() {
                 size="sm" 
                 variant="outline" 
                 onClick={() => navigate('/deposit')}
-                className="text-xs"
+                className="text-xs btn-relief"
               >
                 Dépôt
               </Button>
@@ -193,25 +193,25 @@ export function Dashboard() {
           </div>
         </Card>
 
-        <Card hover className="relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-orange-500/10 to-transparent rounded-full -mr-16 -mt-16"></div>
+        <Card hover className="relative overflow-hidden card-hover">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-orange-500/20 to-transparent rounded-full -mr-16 -mt-16"></div>
           <div className="relative">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-sm font-medium text-gray-600">Points</h3>
               <Award className="h-5 w-5 text-orange-500" />
             </div>
-            <p className="text-2xl font-bold text-gray-900">
+            <p className="text-3xl font-bold text-gray-900">
               {formatCurrency(user.pointsBalance, 'points')}
             </p>
-            <p className="text-sm text-blue-600 mt-2">
+            <p className="text-sm text-blue-600 mt-2 font-medium">
               ≈ {formatCurrency(user.pointsBalance * (user.isInvestor ? 100 : 10), 'ar')}
             </p>
-            <div className="mt-3">
+            <div className="mt-4">
               <Button 
                 size="sm" 
                 variant="outline" 
                 onClick={() => navigate('/exchange-points')}
-                className="text-xs w-full"
+                className="text-xs w-full btn-relief"
               >
                 Échanger
               </Button>
@@ -219,23 +219,23 @@ export function Dashboard() {
           </div>
         </Card>
 
-        <Card hover className="relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-500/10 to-transparent rounded-full -mr-16 -mt-16"></div>
+        <Card hover className="relative overflow-hidden card-hover">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-green-500/20 to-transparent rounded-full -mr-16 -mt-16"></div>
           <div className="relative">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-sm font-medium text-gray-600">Investissements Actifs</h3>
               <TrendingUp className="h-5 w-5 text-green-500" />
             </div>
-            <p className="text-2xl font-bold text-gray-900">
+            <p className="text-3xl font-bold text-gray-900">
               {formatCurrency(getDisplayAmount(150000, 30), getDisplayCurrency())}
             </p>
-            <p className="text-sm text-green-600 mt-2">+23.5% rendement</p>
-            <div className="mt-3">
+            <p className="text-sm text-green-600 mt-2 font-medium">+23.5% rendement</p>
+            <div className="mt-4">
               <Button 
                 size="sm" 
                 variant="outline" 
                 onClick={() => navigate('/invest')}
-                className="text-xs w-full"
+                className="text-xs w-full btn-relief"
               >
                 Investir
               </Button>

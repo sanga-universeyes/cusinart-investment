@@ -17,11 +17,12 @@ export function Card({ children, className = '', hover = false, padding = 'md' }
 
   return (
     <motion.div
-      whileHover={hover ? { y: -2 } : {}}
+      whileHover={hover ? { y: -4, scale: 1.02 } : {}}
+      transition={{ duration: 0.2 }}
       className={`
-        bg-white rounded-xl shadow-lg border border-gray-100
+        bg-white rounded-2xl shadow-xl border border-gray-100/50 backdrop-blur-sm
         ${paddingClasses[padding]}
-        ${hover ? 'hover:shadow-xl transition-shadow duration-300' : ''}
+        ${hover ? 'hover:shadow-2xl hover:border-[#006B76]/20 transition-all duration-300' : ''}
         ${className}
       `}
     >
