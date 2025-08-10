@@ -32,8 +32,8 @@ const menuItems = [
   { to: '/admin/commissions', icon: Award, label: 'Gains/Commissions' },
   { to: '/admin/tasks', icon: CheckSquare, label: 'Micro-tâches' },
   { to: '/admin/referrals', icon: UserCheck, label: 'Parrainage/Affiliés' },
-  { to: '/admin/settings', icon: Settings, label: 'Réglages Système' },
   { to: '/admin/content', icon: FileText, label: 'Pages et Contenus' },
+  { to: '/admin/settings', icon: Settings, label: 'Réglages Système' },
   { to: '/admin/security', icon: Shield, label: 'Sécurité' }
 ];
 

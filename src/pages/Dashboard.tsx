@@ -247,7 +247,7 @@ export function Dashboard() {
       {/* Actions Principales - 5 boutons en bas */}
       <div>
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Navigation Principale</h2>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-5 gap-2 md:gap-4">
           {quickActions.map((action, index) => (
             <ActionButton
               key={index}
@@ -256,6 +256,7 @@ export function Dashboard() {
               description={action.description}
               onClick={action.action}
               variant="primary"
+              className="aspect-square md:aspect-auto"
             />
           ))}
         </div>
@@ -264,7 +265,7 @@ export function Dashboard() {
       {/* Actions Secondaires - 9 boutons carrés */}
       <div>
         <h2 className="text-lg font-semibold text-gray-900 mb-4">Outils & Services</h2>
-        <div className="grid grid-cols-3 md:grid-cols-9 gap-3">
+        <div className="grid grid-cols-3 gap-3 md:gap-4">
           {secondaryActions.map((action, index) => (
             <ActionButton
               key={index}

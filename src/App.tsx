@@ -31,6 +31,13 @@ import { AdminDashboard } from './pages/admin/AdminDashboard';
 import { AdminUsers } from './pages/admin/AdminUsers';
 import { AdminDeposits } from './pages/admin/AdminDeposits';
 import { AdminWithdrawals } from './pages/admin/AdminWithdrawals';
+import { AdminPointsExchange } from './pages/admin/AdminPointsExchange';
+import { AdminTransactions } from './pages/admin/AdminTransactions';
+import { AdminInvestmentPlans } from './pages/admin/AdminInvestmentPlans';
+import { AdminCommissions } from './pages/admin/AdminCommissions';
+import { AdminReferrals } from './pages/admin/AdminReferrals';
+import { AdminContent } from './pages/admin/AdminContent';
+import { AdminSecurity } from './pages/admin/AdminSecurity';
 import { AdminSettings } from './pages/admin/AdminSettings';
 import { AdminTasks } from './pages/admin/AdminTasks';
 
@@ -90,8 +97,15 @@ function App() {
                   <Route path="users" element={<AdminUsers />} />
                   <Route path="deposits" element={<AdminDeposits />} />
                   <Route path="withdrawals" element={<AdminWithdrawals />} />
+                  <Route path="points-exchange" element={<AdminPointsExchange />} />
+                  <Route path="transactions" element={<AdminTransactions />} />
+                  <Route path="investment-plans" element={<AdminInvestmentPlans />} />
+                  <Route path="commissions" element={<AdminCommissions />} />
+                  <Route path="referrals" element={<AdminReferrals />} />
+                  <Route path="content" element={<AdminContent />} />
                   <Route path="settings" element={<AdminSettings />} />
                   <Route path="tasks" element={<AdminTasks />} />
+                  <Route path="security" element={<AdminSecurity />} />
                   <Route index element={<Navigate to="dashboard" replace />} />
                 </Route>
                 

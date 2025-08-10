@@ -37,28 +37,28 @@ export function ActionButton({
       className={`
         relative overflow-hidden rounded-2xl p-4 text-left transition-all duration-300
         ${isPrimary 
-          ? 'bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-xl hover:shadow-2xl border border-gray-200 hover:border-[#006B76]/30' 
-          : 'bg-gradient-to-br from-white to-gray-50 shadow-lg hover:shadow-xl border border-gray-100 hover:border-gray-200'
+          ? 'bg-gradient-to-br from-white via-gray-50 to-gray-100 shadow-xl hover:shadow-2xl border border-gray-200 hover:border-[#006B76]/30 min-h-[80px]' 
+          : 'bg-gradient-to-br from-white to-gray-50 shadow-lg hover:shadow-xl border border-gray-100 hover:border-gray-200 min-h-[80px]'
         }
         ${className}
       `}
     >
-      <div className={`flex ${isPrimary ? 'flex-col items-center text-center space-y-3' : 'items-center space-x-3'}`}>
+      <div className={`flex ${isPrimary ? 'flex-col items-center text-center space-y-2' : 'flex-col items-center text-center space-y-2'}`}>
         <div className={`
-          ${isPrimary ? 'w-16 h-16' : 'w-10 h-10'} rounded-2xl flex items-center justify-center
+          ${isPrimary ? 'w-12 h-12' : 'w-8 h-8'} rounded-xl flex items-center justify-center
           ${isPrimary 
             ? 'bg-gradient-to-br from-[#006B76] via-[#006B76]/90 to-[#006B76]/80 text-white shadow-xl' 
             : 'bg-gradient-to-br from-gray-100 to-gray-200 text-gray-600 shadow-md'
           }
         `}>
-          <Icon className={`${isPrimary ? 'h-8 w-8' : 'h-5 w-5'}`} />
+          <Icon className={`${isPrimary ? 'h-6 w-6' : 'h-4 w-4'}`} />
         </div>
-        <div className={`${isPrimary ? 'text-center' : 'flex-1'}`}>
-          <h3 className={`font-bold text-gray-900 ${isPrimary ? 'text-base' : 'text-sm'}`}>
+        <div className="text-center">
+          <h3 className={`font-bold text-gray-900 ${isPrimary ? 'text-sm' : 'text-xs'} leading-tight`}>
             {label}
           </h3>
-          {description && (
-            <p className={`text-gray-500 mt-1 ${isPrimary ? 'text-sm' : 'text-xs'}`}>
+          {description && isPrimary && (
+            <p className="text-gray-500 mt-1 text-xs leading-tight">
               {description}
             </p>
           )}
