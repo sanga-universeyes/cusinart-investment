@@ -16,7 +16,10 @@ import {
   CheckSquare,
   LogOut,
   Menu,
-  X
+  X,
+  Bell,
+  BarChart3,
+  FileText as FileTextIcon
 } from 'lucide-react';
 import { useAdmin } from '../../contexts/AdminContext';
 import { brandConfig } from '../../config/brand';
@@ -32,6 +35,9 @@ const menuItems = [
   { to: '/admin/commissions', icon: Award, label: 'Gains/Commissions' },
   { to: '/admin/tasks', icon: CheckSquare, label: 'Micro-tâches' },
   { to: '/admin/referrals', icon: UserCheck, label: 'Parrainage/Affiliés' },
+  { to: '/admin/notifications', icon: Bell, label: 'Notifications' },
+  { to: '/admin/reports', icon: BarChart3, label: 'Rapports' },
+  { to: '/admin/logs', icon: FileTextIcon, label: 'Logs Système' },
   { to: '/admin/content', icon: FileText, label: 'Pages et Contenus' },
   { to: '/admin/settings', icon: Settings, label: 'Réglages Système' },
   { to: '/admin/security', icon: Shield, label: 'Sécurité' }

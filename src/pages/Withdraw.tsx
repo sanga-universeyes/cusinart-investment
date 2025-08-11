@@ -111,7 +111,7 @@ export function Withdraw() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6 pb-24 lg:pb-6">
+    <div className="w-full max-w-4xl mx-auto space-y-6 pb-24 lg:pb-6">
       <div className="text-center">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Retrait</h1>
         <p className="text-gray-600">
