@@ -16,7 +16,7 @@ export const authMiddleware = async (req: AuthRequest, res: Response, next: Next
       return res.status(401).json({ error: 'Access token required' });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as any;
+    const decoded = jwt.verify(token, process.env['JWT_SECRET']!) as any;
     
     const user = await prisma.user.findUnique({
       where: { id: decoded.userId },
@@ -68,7 +68,7 @@ export const adminAuthMiddleware = async (req: AuthRequest, res: Response, next:
       return res.status(401).json({ error: 'Access token required' });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as any;
+    const decoded = jwt.verify(token, process.env['JWT_SECRET']!) as any;
     
     const admin = await prisma.admin.findUnique({
       where: { id: decoded.adminId },
@@ -102,7 +102,7 @@ export const optionalAuthMiddleware = async (req: AuthRequest, res: Response, ne
       return next();
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as any;
+    const decoded = jwt.verify(token, process.env['JWT_SECRET']!) as any;
     
     const user = await prisma.user.findUnique({
       where: { id: decoded.userId },

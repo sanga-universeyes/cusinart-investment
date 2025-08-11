@@ -1,9 +1,9 @@
 {
-  "name": "cuiz-investment-frontend",
+  "name": "cuiz-investment-platform",
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Frontend pour la plateforme CUIZ Investment",
+  "description": "Plateforme d'investissement moderne avec système de parrainage, micro-tâches rémunérées et gestion multi-devises",
   "keywords": [
     "investment",
     "platform",
@@ -35,8 +35,10 @@
     "deploy:preview": "npm run build && npm run preview",
     "deploy:vercel": "vercel --prod",
     "deploy:netlify": "netlify deploy --prod --dir=dist",
-    "docker:build": "docker build -t cuiz-frontend .",
-    "docker:run": "docker run -p 5173:5173 cuiz-frontend",
+    "docker:build": "docker build -t cuiz-investment .",
+    "docker:run": "docker run -p 3000:3000 cuiz-investment",
+    "docker:compose": "docker-compose up -d",
+    "docker:compose:down": "docker-compose down",
     "postinstall": "npm run type-check"
   },
   "dependencies": {
