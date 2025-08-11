@@ -94,7 +94,7 @@ export function Team() {
   const commissionRates = getCommissionRates();
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="w-full space-y-6">
       <div className="text-center">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Équipe & Groupe</h1>
         <p className="text-gray-600">Gérez votre réseau de parrainage</p>

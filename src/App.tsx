@@ -23,6 +23,8 @@ import { Team } from './pages/Team';
 import { BuyPoints } from './pages/BuyPoints';
 import { ExchangePoints } from './pages/ExchangePoints';
 import { FAQ } from './pages/FAQ';
+import { CompanyProfile } from './pages/CompanyProfile';
+import { Earnings } from './pages/Earnings';
 
 // Admin Pages
 import { AdminLogin } from './pages/admin/AdminLogin';

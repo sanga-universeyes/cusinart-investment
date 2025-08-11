@@ -90,13 +90,13 @@ export function Deposit() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6 pb-24 lg:pb-6">
+    <div className="w-full space-y-6 pb-24 lg:pb-6">
       <div className="text-center">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Dépôt</h1>
         <p className="text-gray-600">Transférer l'argent à nos agents financiers</p>
       </div>
 
-      <div className="flex justify-center md:justify-end">
+      <div className="flex justify-end">
         <CurrencySelector 
           selected={selectedCurrency}
           onChange={setSelectedCurrency}

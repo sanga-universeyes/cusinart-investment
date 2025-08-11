@@ -113,7 +113,7 @@ export function Earnings() {
   const filteredEarnings = getFilteredEarnings();
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="w-full space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Historique des Gains</h1>

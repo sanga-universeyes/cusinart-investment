@@ -10,7 +10,9 @@ import {
   Eye,
   DollarSign,
   UserCheck,
-  UserX
+  UserX,
+  X,
+  Save
 } from 'lucide-react';
 import { useAdmin } from '../../contexts/AdminContext';
 import { Card } from '../../components/ui/Card';
@@ -28,7 +30,20 @@ export function AdminUsers() {
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showAddFundsModal, setShowAddFundsModal] = useState(false);
-
+  const [editForm, setEditForm] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    isInvestor: false,
+    status: 'active' as User['status']
+  });
+  const [fundsForm, setFundsForm] = useState({
+    amount: '',
+    currency: 'ar' as 'ar' | 'usdt',
+    reason: ''
+  });
+  
   // Mock users data - in real app, this would come from API
   const mockUsers: User[] = [
     {
@@ -80,7 +95,7 @@ export function AdminUsers() {
       updatedAt: new Date()
     }
   ];
-
+  
   const filteredUsers = mockUsers.filter(user => {
     const matchesSearch = 
       user.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -92,17 +107,26 @@ export function AdminUsers() {
     
     return matchesSearch && matchesStatus;
   });
-
+  
   const handleEditUser = (user: User) => {
     setSelectedUser(user);
+    setEditForm({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email || '',
+      phone: user.phone,
+      isInvestor: Boolean(user.isInvestor),
+      status: user.status
+    });
     setShowEditModal(true);
   };
-
+  
   const handleAddFunds = (user: User) => {
     setSelectedUser(user);
+    setFundsForm({ amount: '', currency: 'ar', reason: '' });
     setShowAddFundsModal(true);
   };
-
+  
   const handleDeleteUser = async (userId: string) => {
     if (window.confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
       try {
@@ -113,7 +137,7 @@ export function AdminUsers() {
       }
     }
   };
-
+  
   const handleSuspendUser = async (userId: string) => {
     const reason = window.prompt('Raison de la suspension :');
     if (reason) {
@@ -125,7 +149,7 @@ export function AdminUsers() {
       }
     }
   };
-
+  
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -290,6 +314,140 @@ export function AdminUsers() {
           </div>
         )}
       </Card>
+
+      {/* Edit User Modal */}
+      {showEditModal && selectedUser && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-lg">
+            <div className="flex items-center justify-between p-4 border-b">
+              <h3 className="text-lg font-semibold">Modifier l'utilisateur</h3>
+              <button onClick={() => setShowEditModal(false)} className="p-2 text-gray-500 hover:text-gray-700">
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="p-4 space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Input
+                  label="Prénom"
+                  value={editForm.firstName}
+                  onChange={(e) => setEditForm({ ...editForm, firstName: e.target.value })}
+                />
+                <Input
+                  label="Nom"
+                  value={editForm.lastName}
+                  onChange={(e) => setEditForm({ ...editForm, lastName: e.target.value })}
+                />
+              </div>
+              <Input
+                label="Email"
+                type="email"
+                value={editForm.email}
+                onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
+              />
+              <Input
+                label="Téléphone"
+                value={editForm.phone}
+                onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
+              />
+              <div className="grid grid-cols-2 gap-4">
+                <label className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    checked={editForm.isInvestor}
+                    onChange={(e) => setEditForm({ ...editForm, isInvestor: e.target.checked })}
+                  />
+                  <span className="text-sm">Investisseur</span>
+                </label>
+                <select
+                  value={editForm.status}
+                  onChange={(e) => setEditForm({ ...editForm, status: e.target.value as User['status'] })}
+                  className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006B76]/50"
+                >
+                  <option value="active">Actif</option>
+                  <option value="suspended">Suspendu</option>
+                  <option value="pending">En attente</option>
+                </select>
+              </div>
+            </div>
+            <div className="p-4 border-t flex items-center justify-end space-x-2">
+              <Button variant="outline" onClick={() => setShowEditModal(false)}>Annuler</Button>
+              <Button
+                onClick={async () => {
+                  if (!selectedUser) return;
+                  await updateUser(selectedUser.id, {
+                    firstName: editForm.firstName,
+                    lastName: editForm.lastName,
+                    email: editForm.email,
+                    phone: editForm.phone,
+                    isInvestor: editForm.isInvestor,
+                    status: editForm.status
+                  });
+                  setShowEditModal(false);
+                }}
+              >
+                <Save className="h-4 w-4 mr-2" />
+                Enregistrer
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Add Funds Modal */}
+      {showAddFundsModal && selectedUser && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-lg">
+            <div className="flex items-center justify-between p-4 border-b">
+              <h3 className="text-lg font-semibold">Ajouter des fonds</h3>
+              <button onClick={() => setShowAddFundsModal(false)} className="p-2 text-gray-500 hover:text-gray-700">
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="p-4 space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Input
+                  label="Montant"
+                  type="number"
+                  value={fundsForm.amount}
+                  onChange={(e) => setFundsForm({ ...fundsForm, amount: e.target.value })}
+                />
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Devise</label>
+                  <select
+                    value={fundsForm.currency}
+                    onChange={(e) => setFundsForm({ ...fundsForm, currency: e.target.value as 'ar'|'usdt' })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006B76]/50"
+                  >
+                    <option value="ar">Ariary (Ar)</option>
+                    <option value="usdt">USDT</option>
+                  </select>
+                </div>
+              </div>
+              <Input
+                label="Raison"
+                placeholder="Ex: Ajustement manuel, bonus, etc."
+                value={fundsForm.reason}
+                onChange={(e) => setFundsForm({ ...fundsForm, reason: e.target.value })}
+              />
+            </div>
+            <div className="p-4 border-t flex items-center justify-end space-x-2">
+              <Button variant="outline" onClick={() => setShowAddFundsModal(false)}>Annuler</Button>
+              <Button
+                onClick={async () => {
+                  if (!selectedUser) return;
+                  const amountNum = parseFloat(fundsForm.amount);
+                  if (isNaN(amountNum) || amountNum <= 0) return;
+                  await addFunds(selectedUser.id, amountNum, fundsForm.currency, fundsForm.reason || 'Ajout manuel');
+                  setShowAddFundsModal(false);
+                }}
+              >
+                <DollarSign className="h-4 w-4 mr-2" />
+                Ajouter
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -153,7 +153,7 @@ Revenus crédités automatiquement chaque jour.`
   });
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="w-full space-y-6">
       <div className="text-center">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">
           Questions Fréquentes (FAQ)
@@ -212,7 +212,7 @@ Revenus crédités automatiquement chaque jour.`
             {expandedItems.includes(item.id) && (
               <div className="px-6 pb-6 border-t border-gray-100">
                 <div className="pt-4">
-                  <div className="prose prose-sm max-w-none text-gray-700">
+                  <div className="prose prose-sm max-w-none text-gray-700 w-full">
                     {item.answer.split('\n').map((line, index) => (
                       <p key={index} className="mb-2 last:mb-0">
                         {line}
