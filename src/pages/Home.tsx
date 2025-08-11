@@ -36,7 +36,7 @@ export function Home() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Header */}
       <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <h1 className="text-2xl font-bold" style={{ color: brandConfig.colors.primary }}>
@@ -74,7 +74,7 @@ export function Home() {
 
       {/* Hero Section */}
       <section className="relative py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+        <div className="w-full">
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
               Investissez et
@@ -107,7 +107,7 @@ export function Home() {
 
       {/* Features Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+        <div className="w-full">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
               <Card key={index} hover className="text-center">
@@ -134,7 +134,7 @@ export function Home() {
 
       {/* Stats Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-[#006B76] to-[#006B76]/90">
-        <div className="max-w-7xl mx-auto text-center">
+        <div className="w-full text-center">
           <h2 className="text-3xl font-bold text-white mb-12">
             Rejoignez des milliers d'investisseurs
           </h2>
@@ -157,7 +157,7 @@ export function Home() {
 
       {/* CTA Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-4xl w-full mx-auto text-center">
           <Card padding="lg">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
               Prêt à commencer votre parcours d'investissement ?
@@ -182,7 +182,7 @@ export function Home() {
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center">
+        <div className="w-full text-center">
           <h3 className="text-2xl font-bold mb-4">{brandConfig.name}</h3>
           <p className="text-gray-400 mb-6">
             Plateforme d'investissement sécurisée et moderne
