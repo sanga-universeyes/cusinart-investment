@@ -36,7 +36,7 @@ export function Home() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Header */}
       <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
               <h1 className="text-2xl font-bold" style={{ color: brandConfig.colors.primary }}>
@@ -74,7 +74,7 @@ export function Home() {
 
       {/* Hero Section */}
       <section className="relative py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+        <div className="w-full max-w-none">
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
               Investissez et
@@ -107,8 +107,8 @@ export function Home() {
 
       {/* Features Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="w-full max-w-none">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             {features.map((feature, index) => (
               <Card key={index} hover className="text-center">
                 <div 
@@ -134,17 +134,19 @@ export function Home() {
 
       {/* Stats Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-[#006B76] to-[#006B76]/90">
-        <div className="max-w-7xl mx-auto text-center">
+        <div className="w-full max-w-none text-center">
           <h2 className="text-3xl font-bold text-white mb-12">
             Rejoignez des milliers d'investisseurs
           </h2>
           
-          <div className="grid md:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-8">
             {[
               { value: "10,000+", label: "Utilisateurs Actifs" },
               { value: "500M Ar", label: "Volume d'Investissement" },
               { value: "15%", label: "Rendement Quotidien" },
-              { value: "24/7", label: "Support Client" }
+              { value: "24/7", label: "Support Client" },
+              { value: "3", label: "Niveaux de Parrainage" },
+              { value: "1000+", label: "Missions Disponibles" }
             ].map((stat, index) => (
               <div key={index} className="text-white">
                 <div className="text-4xl font-bold mb-2">{stat.value}</div>
@@ -157,7 +159,7 @@ export function Home() {
 
       {/* CTA Section */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="w-full max-w-none text-center">
           <Card padding="lg">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
               Prêt à commencer votre parcours d'investissement ?
@@ -182,7 +184,7 @@ export function Home() {
 
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center">
+        <div className="w-full max-w-none text-center">
           <h3 className="text-2xl font-bold mb-4">{brandConfig.name}</h3>
           <p className="text-gray-400 mb-6">
             Plateforme d'investissement sécurisée et moderne

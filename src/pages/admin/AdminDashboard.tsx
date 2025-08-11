@@ -267,7 +267,7 @@ export function AdminDashboard() {
     }
   };
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full">
       {/* Header avec informations admin */}
       <div className="bg-gradient-to-r from-[#006B76] to-[#006B76]/80 rounded-2xl p-6 text-white">
         <div className="flex items-center justify-between">
@@ -289,7 +289,7 @@ export function AdminDashboard() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-4">
         {statCards.map((stat, index) => (
           <Card key={index} hover>
             <div className="flex items-center justify-between">
@@ -337,7 +337,7 @@ export function AdminDashboard() {
           <Activity className="mr-2 h-5 w-5" />
           Actions Rapides
         </h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
           {quickActions.map((action, index) => (
             <button
               key={index}
@@ -360,7 +360,7 @@ export function AdminDashboard() {
       </Card>
 
       {/* Recent Activities & System Status */}
-      <div className="grid lg:grid-cols-3 gap-6">
+      <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-6">
         {/* Recent Activities */}
         <Card>
           <div className="flex items-center justify-between mb-4">

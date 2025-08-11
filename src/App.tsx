@@ -39,6 +39,8 @@ import { AdminReferrals } from './pages/admin/AdminReferrals';
 import { AdminContent } from './pages/admin/AdminContent';
 import { AdminSecurity } from './pages/admin/AdminSecurity';
 import { AdminSettings } from './pages/admin/AdminSettings';
+import { AdminSystemSettings } from './pages/admin/AdminSystemSettings';
+import { AdminAnalytics } from './pages/admin/AdminAnalytics';
 import { AdminTasks } from './pages/admin/AdminTasks';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -73,8 +75,10 @@ function AppLayout({ children }: { children: React.ReactNode }) {
       <NotificationBanner />
       <div className="flex">
         <Sidebar isOpen={sidebarOpen} />
-        <main className="flex-1 lg:ml-64 p-6 pb-20 lg:pb-6">
-          {children}
+        <main className="flex-1 lg:ml-64 p-4 pb-20 lg:pb-4 w-full">
+          <div className="max-w-none">
+            {children}
+          </div>
         </main>
       </div>
       <MobileNav />
@@ -104,6 +108,8 @@ function App() {
                   <Route path="referrals" element={<AdminReferrals />} />
                   <Route path="content" element={<AdminContent />} />
                   <Route path="settings" element={<AdminSettings />} />
+                  <Route path="system-settings" element={<AdminSystemSettings />} />
+                  <Route path="analytics" element={<AdminAnalytics />} />
                   <Route path="tasks" element={<AdminTasks />} />
                   <Route path="security" element={<AdminSecurity />} />
                   <Route index element={<Navigate to="dashboard" replace />} />

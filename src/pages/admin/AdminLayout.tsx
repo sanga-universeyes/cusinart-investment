@@ -16,7 +16,8 @@ import {
   CheckSquare,
   LogOut,
   Menu,
-  X
+  X,
+  BarChart3
 } from 'lucide-react';
 import { useAdmin } from '../../contexts/AdminContext';
 import { brandConfig } from '../../config/brand';
@@ -33,7 +34,9 @@ const menuItems = [
   { to: '/admin/tasks', icon: CheckSquare, label: 'Micro-tâches' },
   { to: '/admin/referrals', icon: UserCheck, label: 'Parrainage/Affiliés' },
   { to: '/admin/content', icon: FileText, label: 'Pages et Contenus' },
-  { to: '/admin/settings', icon: Settings, label: 'Réglages Système' },
+  { to: '/admin/analytics', icon: BarChart3, label: 'Analytics' },
+  { to: '/admin/settings', icon: Settings, label: 'Réglages Généraux' },
+  { to: '/admin/system-settings', icon: Settings, label: 'Paramètres Système' },
   { to: '/admin/security', icon: Shield, label: 'Sécurité' }
 ];
 
@@ -55,8 +58,8 @@ export function AdminLayout() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
-        <div className="px-4 sm:px-6 lg:px-8">
+      <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50 w-full">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo & Menu Toggle */}
             <div className="flex items-center">
@@ -127,8 +130,10 @@ export function AdminLayout() {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 lg:ml-0 p-6">
-          <Outlet />
+        <main className="flex-1 lg:ml-0 p-4 w-full">
+          <div className="max-w-none">
+            <Outlet />
+          </div>
         </main>
       </div>
 

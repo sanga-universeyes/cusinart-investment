@@ -149,7 +149,7 @@ export function Dashboard() {
   const totalDailyReturn = mockInvestments.reduce((sum, inv) => sum + inv.dailyReturn, 0);
 
   return (
-    <div className="space-y-6 pb-24 lg:pb-6">
+    <div className="space-y-6 pb-24 lg:pb-6 w-full">
       {/* Welcome Header */}
       <div className="bg-gradient-to-br from-[#006B76] via-[#006B76]/90 to-[#006B76]/80 rounded-2xl p-6 text-white shadow-2xl">
         <div className="flex items-center justify-between">
@@ -188,7 +188,7 @@ export function Dashboard() {
       </div>
 
       {/* Balance Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
         <Card hover className="relative overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/20 to-transparent rounded-full -mr-16 -mt-16"></div>
           <div className="relative">
@@ -316,7 +316,7 @@ export function Dashboard() {
           <Settings className="mr-2 h-5 w-5" />
           Navigation Principale
         </h2>
-        <div className="grid grid-cols-5 gap-2 md:gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-2 md:gap-4">
           {quickActions.map((action, index) => (
             <ActionButton
               key={index}
@@ -337,7 +337,7 @@ export function Dashboard() {
           <Plus className="mr-2 h-5 w-5" />
           Outils & Services
         </h2>
-        <div className="grid grid-cols-3 gap-3 md:gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-9 gap-3 md:gap-4">
           {secondaryActions.map((action, index) => (
             <ActionButton
               key={index}
@@ -412,7 +412,7 @@ export function Dashboard() {
       </Card>
 
       {/* Statistiques Rapides */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
         <Card className="text-center bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
           <Users className="h-8 w-8 text-blue-600 mx-auto mb-2" />
           <p className="text-xl font-bold text-blue-900">3</p>
@@ -439,6 +439,32 @@ export function Dashboard() {
             {formatCurrency(totalDailyReturn, 'ar')}
           </p>
           <p className="text-sm text-yellow-700">Revenus/jour</p>
+        </Card>
+
+        <Card className="text-center bg-gradient-to-br from-red-50 to-red-100 border-red-200">
+          <TrendingUp className="h-8 w-8 text-red-600 mx-auto mb-2" />
+          <p className="text-xl font-bold text-red-900">
+            {formatCurrency(totalInvested, 'ar')}
+          </p>
+          <p className="text-sm text-red-700">Investi</p>
+        </Card>
+
+        <Card className="text-center bg-gradient-to-br from-indigo-50 to-indigo-100 border-indigo-200">
+          <History className="h-8 w-8 text-indigo-600 mx-auto mb-2" />
+          <p className="text-xl font-bold text-indigo-900">24</p>
+          <p className="text-sm text-indigo-700">Transactions</p>
+        </Card>
+
+        <Card className="text-center bg-gradient-to-br from-pink-50 to-pink-100 border-pink-200">
+          <ShoppingCart className="h-8 w-8 text-pink-600 mx-auto mb-2" />
+          <p className="text-xl font-bold text-pink-900">5</p>
+          <p className="text-sm text-pink-700">Plans Actifs</p>
+        </Card>
+
+        <Card className="text-center bg-gradient-to-br from-teal-50 to-teal-100 border-teal-200">
+          <RefreshCw className="h-8 w-8 text-teal-600 mx-auto mb-2" />
+          <p className="text-xl font-bold text-teal-900">7j</p>
+          <p className="text-sm text-teal-700">Membre</p>
         </Card>
       </div>
     </div>
