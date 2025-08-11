@@ -16,7 +16,8 @@ import {
   CheckSquare,
   LogOut,
   Menu,
-  X
+  X,
+  BarChart3
 } from 'lucide-react';
 import { useAdmin } from '../../contexts/AdminContext';
 import { brandConfig } from '../../config/brand';
@@ -33,6 +34,7 @@ const menuItems = [
   { to: '/admin/tasks', icon: CheckSquare, label: 'Micro-tâches' },
   { to: '/admin/referrals', icon: UserCheck, label: 'Parrainage/Affiliés' },
   { to: '/admin/content', icon: FileText, label: 'Pages et Contenus' },
+  { to: '/admin/analytics', icon: BarChart3, label: 'Analytics & Rapports' },
   { to: '/admin/settings', icon: Settings, label: 'Réglages Système' },
   { to: '/admin/security', icon: Shield, label: 'Sécurité' }
 ];
@@ -55,7 +57,7 @@ export function AdminLayout() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+      <header className="bg-white/95 backdrop-blur-sm shadow-lg border-b border-gray-200/50 sticky top-0 z-50">
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo & Menu Toggle */}
@@ -99,7 +101,7 @@ export function AdminLayout() {
       <div className="flex">
         {/* Sidebar */}
         <aside className={`
-          fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out
+          fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl border-r border-gray-200 transform transition-transform duration-300 ease-in-out
           lg:translate-x-0 lg:static lg:inset-0 mt-16 lg:mt-0
           ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
         `}>
@@ -111,10 +113,10 @@ export function AdminLayout() {
                   to={item.to}
                   onClick={() => setSidebarOpen(false)}
                   className={({ isActive }) => `
-                    flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200
+                    flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 mx-2
                     ${isActive
-                      ? 'bg-gradient-to-r from-[#006B76] to-[#006B76]/80 text-white shadow-lg'
-                      : 'text-gray-700 hover:bg-gray-100'
+                      ? 'bg-gradient-to-r from-[#006B76] to-[#006B76]/80 text-white shadow-lg border border-[#006B76]/20'
+                      : 'text-gray-700 hover:bg-gray-100 hover:text-[#006B76] border border-transparent'
                     }
                   `}
                 >
@@ -127,8 +129,10 @@ export function AdminLayout() {
         </aside>
 
         {/* Main Content */}
-        <main className="flex-1 lg:ml-0 p-6">
-          <Outlet />
+        <main className="flex-1 lg:ml-0 p-4 w-full">
+          <div className="w-full max-w-none">
+            <Outlet />
+          </div>
         </main>
       </div>
 

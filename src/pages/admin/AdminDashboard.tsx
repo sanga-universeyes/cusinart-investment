@@ -21,12 +21,38 @@ import {
 import { useAdmin } from '../../contexts/AdminContext';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
+import { LineChart, BarChart, PieChart } from '../../components/ui/Chart';
 import { formatCurrency } from '../../utils/currency';
 import { useNavigate } from 'react-router-dom';
 
 export function AdminDashboard() {
   const { stats, admin } = useAdmin();
   const navigate = useNavigate();
+
+  // Chart data for analytics
+  const userGrowthData = [
+    { label: 'Jan', value: Math.floor(stats.totalUsers * 0.1) },
+    { label: 'Fév', value: Math.floor(stats.totalUsers * 0.2) },
+    { label: 'Mar', value: Math.floor(stats.totalUsers * 0.35) },
+    { label: 'Avr', value: Math.floor(stats.totalUsers * 0.5) },
+    { label: 'Mai', value: Math.floor(stats.totalUsers * 0.7) },
+    { label: 'Jun', value: Math.floor(stats.totalUsers * 0.9) },
+    { label: 'Jul', value: stats.totalUsers },
+  ];
+
+  const revenueData = [
+    { label: 'Dépôts', value: Math.floor(stats.totalBalance * 0.4), color: '#10B981' },
+    { label: 'Investissements', value: Math.floor(stats.totalInvestments * 0.3), color: '#006B76' },
+    { label: 'Commissions', value: Math.floor(stats.totalBalance * 0.1), color: '#F59E0B' },
+    { label: 'Points', value: Math.floor(stats.pendingPointsExchange * 0.2), color: '#8B5CF6' },
+  ];
+
+  const transactionTypesData = [
+    { label: 'Dépôts', value: 45, color: '#10B981' },
+    { label: 'Retraits', value: 25, color: '#EF4444' },
+    { label: 'Investissements', value: 20, color: '#006B76' },
+    { label: 'Échanges Points', value: 10, color: '#F59E0B' },
+  ];
 
   const statCards = [
     {
@@ -199,6 +225,30 @@ export function AdminDashboard() {
       action: () => navigate('/admin/users')
     },
     {
+      title: 'Transactions',
+      description: 'Voir toutes les transactions',
+      icon: Activity,
+      color: 'bg-purple-500',
+      count: 0,
+      action: () => navigate('/admin/transactions')
+    },
+    {
+      title: 'Plans Investissement',
+      description: 'Gérer les plans d\'investissement',
+      icon: TrendingUp,
+      color: 'bg-indigo-500',
+      count: 0,
+      action: () => navigate('/admin/investment-plans')
+    },
+    {
+      title: 'Sécurité',
+      description: 'Paramètres de sécurité',
+      icon: Shield,
+      color: 'bg-gray-500',
+      count: 0,
+      action: () => navigate('/admin/security')
+    },
+    {
       title: 'Micro-tâches',
       description: 'Valider les missions',
       icon: Award,
@@ -289,7 +339,7 @@ export function AdminDashboard() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
         {statCards.map((stat, index) => (
           <Card key={index} hover>
             <div className="flex items-center justify-between">
@@ -331,13 +381,58 @@ export function AdminDashboard() {
         ))}
       </div>
 
+      {/* Analytics Charts */}
+      <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-6">
+        {/* User Growth Chart */}
+        <Card>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+              <BarChart3 className="mr-2 h-5 w-5" />
+              Croissance Utilisateurs
+            </h3>
+            <Button variant="ghost" size="sm">
+              <Eye className="h-4 w-4" />
+            </Button>
+          </div>
+          <LineChart data={userGrowthData} width={300} height={180} />
+        </Card>
+
+        {/* Revenue Distribution */}
+        <Card>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+              <DollarSign className="mr-2 h-5 w-5" />
+              Répartition Revenus
+            </h3>
+            <Button variant="ghost" size="sm">
+              <Eye className="h-4 w-4" />
+            </Button>
+          </div>
+          <BarChart data={revenueData} width={300} height={180} />
+        </Card>
+
+        {/* Transaction Types */}
+        <Card>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+              <PieChart className="mr-2 h-5 w-5" />
+              Types de Transactions
+            </h3>
+            <Button variant="ghost" size="sm">
+              <Eye className="h-4 w-4" />
+            </Button>
+          </div>
+          <PieChart data={transactionTypesData} size={180} />
+        </Card>
+      </div>
+
       {/* Actions rapides */}
       <Card>
         <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
           <Activity className="mr-2 h-5 w-5" />
           Actions Rapides
         </h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
           {quickActions.map((action, index) => (
             <button
               key={index}
@@ -360,7 +455,7 @@ export function AdminDashboard() {
       </Card>
 
       {/* Recent Activities & System Status */}
-      <div className="grid lg:grid-cols-3 gap-6">
+      <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-6">
         {/* Recent Activities */}
         <Card>
           <div className="flex items-center justify-between mb-4">

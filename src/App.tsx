@@ -23,6 +23,8 @@ import { Team } from './pages/Team';
 import { BuyPoints } from './pages/BuyPoints';
 import { ExchangePoints } from './pages/ExchangePoints';
 import { FAQ } from './pages/FAQ';
+import { CompanyProfile } from './pages/CompanyProfile';
+import { Earnings } from './pages/Earnings';
 
 // Admin Pages
 import { AdminLogin } from './pages/admin/AdminLogin';
@@ -40,6 +42,7 @@ import { AdminContent } from './pages/admin/AdminContent';
 import { AdminSecurity } from './pages/admin/AdminSecurity';
 import { AdminSettings } from './pages/admin/AdminSettings';
 import { AdminTasks } from './pages/admin/AdminTasks';
+import { AdminAnalytics } from './pages/admin/AdminAnalytics';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -73,8 +76,10 @@ function AppLayout({ children }: { children: React.ReactNode }) {
       <NotificationBanner />
       <div className="flex">
         <Sidebar isOpen={sidebarOpen} />
-        <main className="flex-1 lg:ml-64 p-6 pb-20 lg:pb-6">
-          {children}
+        <main className="flex-1 lg:ml-64 p-4 pb-20 lg:pb-4 w-full">
+          <div className="w-full max-w-none">
+            {children}
+          </div>
         </main>
       </div>
       <MobileNav />
@@ -106,6 +111,7 @@ function App() {
                   <Route path="settings" element={<AdminSettings />} />
                   <Route path="tasks" element={<AdminTasks />} />
                   <Route path="security" element={<AdminSecurity />} />
+                  <Route path="analytics" element={<AdminAnalytics />} />
                   <Route index element={<Navigate to="dashboard" replace />} />
                 </Route>
                 

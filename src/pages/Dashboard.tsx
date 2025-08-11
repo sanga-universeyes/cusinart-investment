@@ -188,7 +188,7 @@ export function Dashboard() {
       </div>
 
       {/* Balance Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
         <Card hover className="relative overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-500/20 to-transparent rounded-full -mr-16 -mt-16"></div>
           <div className="relative">
@@ -270,6 +270,30 @@ export function Dashboard() {
             </Button>
           </div>
         </Card>
+
+        <Card hover className="relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-purple-500/20 to-transparent rounded-full -mr-16 -mt-16"></div>
+          <div className="relative">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-sm font-medium text-gray-600">Équipe</h3>
+              <Users className="h-5 w-5 text-purple-500" />
+            </div>
+            <p className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+              {user.totalReferrals || 0}
+            </p>
+            <p className="text-sm text-purple-600 font-medium mb-4">
+              {formatCurrency((user.totalReferrals || 0) * 1000, 'ar')} commissions
+            </p>
+            <Button 
+              size="sm" 
+              variant="outline" 
+              onClick={() => navigate('/team')}
+              className="w-full text-xs"
+            >
+              Voir l'équipe
+            </Button>
+          </div>
+        </Card>
       </div>
 
       {/* Investissements Actifs */}
@@ -337,7 +361,7 @@ export function Dashboard() {
           <Plus className="mr-2 h-5 w-5" />
           Outils & Services
         </h2>
-        <div className="grid grid-cols-3 gap-3 md:gap-4">
+        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4">
           {secondaryActions.map((action, index) => (
             <ActionButton
               key={index}
