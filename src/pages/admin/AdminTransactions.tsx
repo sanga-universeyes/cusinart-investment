@@ -10,13 +10,17 @@ import {
   TrendingUp,
   Award,
   RefreshCw,
-  Calendar
+  Calendar,
+  Clock,
+  XCircle,
+  Activity
 } from 'lucide-react';
 import { Card } from '../../components/ui/Card';
 import { Button } from '../../components/ui/Button';
 import { Input } from '../../components/ui/Input';
 import { StatusBadge } from '../../components/ui/StatusBadge';
 import { formatCurrency } from '../../utils/currency';
+import toast from 'react-hot-toast';
 
 interface Transaction {
   id: string;
@@ -166,7 +170,28 @@ export function AdminTransactions() {
   const getTotalByStatus = (status: Transaction['status']) => {
     return filteredTransactions
       .filter(t => t.status === status)
-      .reduce((sum, t) => sum + (t.currency === 'points' ? t.amount * 100 : t.amount), 0);
+      .reduce((sum, t) => {
+        if (t.currency === 'points') {
+          return sum + (t.amount * 100); // 1 point = 100 Ar
+        }
+        if (t.currency === 'usdt') {
+          return sum + (t.amount * 5000); // 1 USDT = 5000 Ar
+        }
+        return sum + t.amount;
+      }, 0);
+  };
+
+  const handleApprove = (transactionId: string) => {
+    toast.success('Transaction approuvée !');
+    // Ici vous ajouteriez la logique pour approuver la transaction
+  };
+
+  const handleReject = (transactionId: string) => {
+    const reason = prompt('Raison du rejet :');
+    if (reason) {
+      toast.success('Transaction rejetée !');
+      // Ici vous ajouteriez la logique pour rejeter la transaction
+    }
   };
 
   return (
@@ -370,9 +395,30 @@ export function AdminTransactions() {
                     </td>
                     
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <Button size="sm" variant="outline">
-                        <Eye className="h-4 w-4" />
-                      </Button>
+                      <div className="flex items-center justify-end space-x-2">
+                        <Button size="sm" variant="outline">
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                        {transaction.status === 'pending' && (
+                          <>
+                            <Button
+                              size="sm"
+                              onClick={() => handleApprove(transaction.id)}
+                              className="bg-green-600 hover:bg-green-700 text-white"
+                            >
+                              Approuver
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              onClick={() => handleReject(transaction.id)}
+                              className="border-red-300 text-red-600 hover:bg-red-50"
+                            >
+                              Rejeter
+                            </Button>
+                          </>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 );

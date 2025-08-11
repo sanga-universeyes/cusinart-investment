@@ -82,11 +82,11 @@ export function AdminLayout() {
               <div className="flex items-center space-x-2">
                 <div className="w-8 h-8 bg-gradient-to-r from-[#006B76] to-[#006B76]/80 rounded-full flex items-center justify-center">
                   <span className="text-white text-sm font-semibold">
-                    {admin.fullName.split(' ').map(n => n[0]).join('')}
+                    {admin.username.charAt(0).toUpperCase()}
                   </span>
                 </div>
                 <div className="hidden md:block">
-                  <p className="text-sm font-medium text-gray-900">{admin.fullName}</p>
+                  <p className="text-sm font-medium text-gray-900">{admin.username}</p>
                   <p className="text-xs text-gray-500 capitalize">{admin.role.replace('_', ' ')}</p>
                 </div>
               </div>

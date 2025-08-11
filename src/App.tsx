@@ -43,6 +43,7 @@ import { AdminTasks } from './pages/admin/AdminTasks';
 import { AdminNotifications } from './pages/admin/AdminNotifications';
 import { AdminReports } from './pages/admin/AdminReports';
 import { AdminLogs } from './pages/admin/AdminLogs';
+import { AdminTransactionsTest } from './pages/admin/AdminTransactionsTest';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -114,6 +115,7 @@ function App() {
                   <Route path="reports" element={<AdminReports />} />
                   <Route path="logs" element={<AdminLogs />} />
                   <Route path="security" element={<AdminSecurity />} />
+                  <Route path="transactions-test" element={<AdminTransactionsTest />} />
                   <Route index element={<Navigate to="dashboard" replace />} />
                 </Route>
                 
