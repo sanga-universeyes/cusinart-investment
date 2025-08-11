@@ -168,7 +168,7 @@ export function History() {
   const filteredTransactions = getFilteredTransactions();
 
   return (
-    <div className="space-y-6 pb-24 lg:pb-6">
+    <div className="w-full space-y-6 pb-24 lg:pb-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between space-y-4 md:space-y-0">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Historique des Transactions</h1>
@@ -247,7 +247,7 @@ export function History() {
       </div>
 
       {/* Liste des transactions */}
-      <div className="space-y-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {filteredTransactions.map(transaction => {
           const Icon = getTransactionIcon(transaction.type);
           const colorClass = getTransactionColor(transaction.type);
