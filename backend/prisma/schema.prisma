@@ -62,10 +62,10 @@ model User {
   tasks            Task[]
   taskExecutions   TaskExecution[]
   commissions      Commission[]
+  fromCommissions  Commission[] @relation("CommissionFromUser")
   notifications    Notification[]
   
-  // Admin logs
-  adminLogs        AdminLog[]
+
   
   @@map("users")
 }
@@ -100,6 +100,7 @@ model Transaction {
   user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   approver        Admin?          @relation("TransactionApprover", fields: [approvedBy], references: [id])
   rejecter        Admin?          @relation("TransactionRejecter", fields: [rejectedBy], references: [id])
+  commissions     Commission[]
   
   @@map("transactions")
 }
@@ -291,7 +292,7 @@ model Notification {
 
 // System Settings model
 model SystemSettings {
-  id              String   @id @default(1)
+  id              String   @id @default(cuid())
   
   // Currencies
   currenciesAr    Boolean  @default(true)

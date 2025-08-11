@@ -10,7 +10,7 @@ export const taskController = {
   // Get tasks
   async getTasks(req: AuthRequest, res: Response) {
     try {
-      const { page = 1, limit = 10, type, status } = req.query;
+      const { page = 1, limit = 10, type } = req.query;
 
       const skip = (parseInt(page as string) - 1) * parseInt(limit as string);
 

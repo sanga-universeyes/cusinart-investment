@@ -94,7 +94,7 @@ export const adminAuthMiddleware = async (req: AuthRequest, res: Response, next:
   }
 };
 
-export const optionalAuthMiddleware = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const optionalAuthMiddleware = async (req: AuthRequest, _res: Response, next: NextFunction) => {
   try {
     const token = req.headers.authorization?.replace('Bearer ', '');
 

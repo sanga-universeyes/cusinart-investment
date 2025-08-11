@@ -87,7 +87,7 @@ async function main() {
   ]);
 
   // Create system settings
-  const settings = await prisma.systemSettings.upsert({
+  await prisma.systemSettings.upsert({
     where: { id: 1 },
     update: {},
     create: {

@@ -8,7 +8,7 @@ interface AuthRequest extends Request {
 
 export const investmentController = {
   // Get investment plans
-  async getPlans(req: Request, res: Response) {
+  async getPlans(_req: Request, res: Response) {
     try {
       const plans = await prisma.investmentPlan.findMany({
         where: { status: 'ACTIVE' },

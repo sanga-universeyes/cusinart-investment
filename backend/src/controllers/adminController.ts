@@ -8,7 +8,7 @@ interface AuthRequest extends Request {
 
 export const adminController = {
   // Get dashboard stats
-  async getDashboardStats(req: AuthRequest, res: Response) {
+  async getDashboardStats(_req: AuthRequest, res: Response) {
     try {
       const [
         totalUsers,
@@ -372,7 +372,7 @@ export const adminController = {
   },
 
   // Get investment plans
-  async getInvestmentPlans(req: AuthRequest, res: Response) {
+  async getInvestmentPlans(_req: AuthRequest, res: Response) {
     try {
       const plans = await prisma.investmentPlan.findMany({
         orderBy: { minAmount: 'asc' }

@@ -42,7 +42,7 @@ export const transactionController = {
   async createWithdrawal(req: AuthRequest, res: Response) {
     try {
       const userId = req.user.id;
-      const { amount, currency, method, accountDetails, withdrawalPassword } = req.body;
+      const { amount, currency, method, withdrawalPassword } = req.body;
 
       // Verify withdrawal password
       const user = await prisma.user.findUnique({

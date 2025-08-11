@@ -54,7 +54,7 @@ export const notificationController = {
       const userId = req.user.id;
       const { id } = req.params;
 
-      const notification = await prisma.notification.updateMany({
+      await prisma.notification.updateMany({
         where: {
           id,
           userId
