@@ -1,249 +1,306 @@
 # CUIZ Investment Platform
 
-Une plateforme d'investissement moderne avec système de parrainage, micro-tâches rémunérées et gestion multi-devises (Ariary/USDT).
+Plateforme d'investissement moderne avec système de parrainage, micro-tâches rémunérées et gestion multi-devises (Ariary/USDT).
 
-## 🚀 Fonctionnalités
+## 🏗️ Architecture
 
-### Côté Client
-- **Dashboard interactif** avec statistiques en temps réel
-- **Système d'investissement** avec plans CUIZ 1-4
-- **Gestion des dépôts/retraits** via Mobile Money et USDT
-- **Système de parrainage** à 3 niveaux
-- **Micro-tâches rémunérées** avec système de points
-- **Gestion multi-devises** (Ariary et USDT)
-- **Interface responsive** optimisée mobile/desktop
-- **Notifications en temps réel**
-- **Historique complet** des transactions
+Ce projet est divisé en deux parties distinctes :
 
-### Côté Admin
-- **Dashboard administrateur** avec métriques globales
-- **Gestion des utilisateurs** (CRUD complet)
-- **Validation des transactions** (dépôts/retraits)
-- **Gestion des plans d'investissement**
-- **Système de commissions** et parrainage
-- **Gestion des micro-tâches**
-- **Notifications système**
-- **Rapports et statistiques** avec exports
-- **Logs système** pour monitoring
-- **Paramètres de sécurité**
-
-## 🛠️ Technologies Utilisées
-
-- **Frontend**: React 18 + TypeScript
-- **Styling**: Tailwind CSS
-- **Icons**: Lucide React
-- **Routing**: React Router v6
-- **State Management**: React Context API
-- **Notifications**: React Hot Toast
-- **Build Tool**: Vite
-- **Package Manager**: npm
-
-## 📦 Installation
-
-### Prérequis
-- Node.js 18+ 
-- npm 9+
-
-### Installation des dépendances
-```bash
-npm install
-```
-
-### Variables d'environnement
-Créez un fichier `.env.local` à la racine du projet :
-
-```env
-VITE_API_URL=http://localhost:3000/api
-VITE_WS_URL=ws://localhost:8080
-VITE_APP_NAME=CUIZ Investment
-```
-
-### Démarrage en développement
-```bash
-npm run dev
-```
-
-L'application sera accessible sur `http://localhost:5173`
-
-### Build de production
-```bash
-npm run build
-```
-
-### Preview de production
-```bash
-npm run preview
-```
+- **Backend** : API REST + WebSocket avec Node.js, Express, Prisma et PostgreSQL
+- **Frontend** : Interface React avec TypeScript, Tailwind CSS et Vite
 
 ## 📁 Structure du Projet
 
 ```
-src/
-├── components/          # Composants réutilisables
-│   ├── ui/             # Composants UI de base
-│   └── layout/         # Composants de mise en page
-├── contexts/           # Contextes React
-├── pages/              # Pages de l'application
-│   ├── admin/          # Pages administrateur
-│   └── ...             # Pages utilisateur
-├── utils/              # Utilitaires et helpers
-├── config/             # Configuration
-├── types/              # Types TypeScript
-└── i18n/               # Internationalisation
+cuiz-investment-platform/
+├── backend/                 # API Backend
+│   ├── src/
+│   │   ├── controllers/     # Contrôleurs API
+│   │   ├── middleware/      # Middlewares Express
+│   │   ├── models/          # Modèles de données
+│   │   ├── routes/          # Routes API
+│   │   ├── services/        # Services métier
+│   │   ├── utils/           # Utilitaires
+│   │   └── types/           # Types TypeScript
+│   ├── prisma/              # Schéma de base de données
+│   ├── package.json
+│   └── README.md
+├── frontend/                # Interface React
+│   ├── src/
+│   │   ├── components/      # Composants React
+│   │   ├── contexts/        # Contextes React
+│   │   ├── pages/           # Pages de l'application
+│   │   ├── utils/           # Utilitaires
+│   │   └── types/           # Types TypeScript
+│   ├── package.json
+│   └── README.md
+└── README.md               # Ce fichier
 ```
+
+## 🚀 Démarrage Rapide
+
+### Prérequis
+- Node.js >= 18.0.0
+- npm >= 9.0.0
+- PostgreSQL >= 14.0
+- Redis >= 6.0 (optionnel)
+
+### 1. Backend
+
+```bash
+# Installer les dépendances
+cd backend
+npm install
+
+# Configurer la base de données
+cp .env.example .env
+# Modifier DATABASE_URL dans .env
+
+# Générer le client Prisma
+npx prisma generate
+
+# Créer les tables
+npx prisma migrate dev
+
+# Démarrer le serveur
+npm run dev
+```
+
+Le backend sera accessible sur `http://localhost:3000`
+
+### 2. Frontend
+
+```bash
+# Installer les dépendances
+cd frontend
+npm install
+
+# Configurer l'environnement
+cp .env.example .env
+# Modifier VITE_API_URL si nécessaire
+
+# Démarrer l'application
+npm run dev
+```
+
+Le frontend sera accessible sur `http://localhost:5173`
+
+## 🛠️ Technologies
+
+### Backend
+- **Node.js** - Runtime JavaScript
+- **Express** - Framework web
+- **TypeScript** - Typage statique
+- **Prisma** - ORM et migrations
+- **PostgreSQL** - Base de données
+- **JWT** - Authentification
+- **Socket.io** - Communication temps réel
+- **Winston** - Logging
+- **Jest** - Tests
+
+### Frontend
+- **React 18** - Bibliothèque UI
+- **TypeScript** - Typage statique
+- **Vite** - Build tool
+- **React Router** - Navigation
+- **Tailwind CSS** - Styling
+- **Lucide React** - Icônes
+- **React Hot Toast** - Notifications
+
+## 📊 Fonctionnalités
+
+### Interface Utilisateur
+- Dashboard interactif avec statistiques
+- Système d'investissement (plans CUIZ 1-4)
+- Gestion des dépôts/retraits
+- Système de parrainage multi-niveaux
+- Micro-tâches rémunérées
+- Gestion multi-devises (Ariary/USDT)
+- Notifications temps réel
+- Interface responsive
+
+### Interface Admin
+- Dashboard administrateur
+- Gestion des utilisateurs
+- Validation des transactions
+- Gestion des investissements
+- Système de commissions
+- Gestion des tâches
+- Rapports et statistiques
+- Logs système
 
 ## 🔧 Configuration
 
-### Configuration de la marque
-Modifiez `src/config/brand.ts` pour personnaliser :
-- Nom de l'application
-- Couleurs principales
-- Logo
-- Informations de contact
+### Variables d'Environnement Backend
 
-### Configuration des plans d'investissement
-Modifiez `src/utils/constants.ts` pour ajuster :
-- Plans d'investissement
-- Taux de commission
-- Limites de montants
-- Méthodes de paiement
+```env
+# Server
+PORT=3000
+NODE_ENV=development
 
-## 🎨 Interface Utilisateur
+# Database
+DATABASE_URL="postgresql://user:password@localhost:5432/cuiz_db"
 
-### Design System
-- **Couleurs principales**: #006B76 (teal)
-- **Couleurs secondaires**: #FF6B35 (orange)
-- **Typographie**: Inter (Google Fonts)
-- **Icônes**: Lucide React
-- **Animations**: Transitions CSS fluides
+# JWT
+JWT_SECRET=your-super-secret-jwt-key
+JWT_REFRESH_SECRET=your-super-secret-refresh-key
 
-### Responsive Design
-- **Mobile First** approach
-- **Breakpoints**: 640px, 768px, 1024px, 1280px
-- **Grilles adaptatives** pour tous les écrans
+# Redis (optionnel)
+REDIS_URL=redis://localhost:6379
 
-## 🔐 Sécurité
+# Email
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your-email@gmail.com
+SMTP_PASS=your-app-password
+```
 
-### Authentification
-- **JWT Tokens** pour l'authentification
-- **Refresh tokens** automatiques
-- **Protection des routes** côté client
-- **Validation des formulaires** robuste
+### Variables d'Environnement Frontend
 
-### Validation
-- **Validation côté client** avec schémas personnalisés
-- **Sanitisation des données** d'entrée
-- **Protection XSS** intégrée
+```env
+# API
+VITE_API_URL=http://localhost:3000/api
+VITE_WS_URL=ws://localhost:8080
 
-## 📊 Fonctionnalités Avancées
+# App
+VITE_APP_NAME=CUIZ Investment
+VITE_BRAND_COLOR=#006B76
+```
 
-### Système de Points
-- **Achat de points** avec Ariary/USDT
-- **Échange de points** contre argent
-- **Création de micro-tâches** rémunérées
-- **Taux différenciés** investisseurs/non-investisseurs
+## 🗄️ Base de Données
 
-### Parrainage Multi-niveaux
-- **Niveau 1**: 10% commission
-- **Niveau 2**: 6% commission  
-- **Niveau 3**: 3% commission
-- **Suivi en temps réel** des filleuls
+### Modèles Principaux
 
-### Investissements
-- **4 plans disponibles** (CUIZ 1-4)
-- **Rendements quotidiens** garantis
-- **Durées flexibles** (30-120 jours)
-- **Calculs automatiques** des profits
+- **User** - Utilisateurs et profils
+- **Transaction** - Dépôts, retraits, investissements
+- **Investment** - Plans et investissements actifs
+- **Task** - Micro-tâches et exécutions
+- **Commission** - Système de parrainage
+- **Admin** - Administrateurs et permissions
+- **Notification** - Notifications système
+
+### Migration
+
+```bash
+cd backend
+
+# Créer une nouvelle migration
+npx prisma migrate dev --name add_new_feature
+
+# Appliquer les migrations en production
+npx prisma migrate deploy
+
+# Visualiser la base de données
+npx prisma studio
+```
+
+## 🧪 Tests
+
+### Backend
+```bash
+cd backend
+npm test
+npm run test:watch
+npm run test:coverage
+```
+
+### Frontend
+```bash
+cd frontend
+npm test
+npm run test:ui
+```
 
 ## 🚀 Déploiement
 
-### Build de Production
+### Docker Compose (Recommandé)
+
 ```bash
+# Démarrer tous les services
+docker-compose up -d
+
+# Voir les logs
+docker-compose logs -f
+
+# Arrêter les services
+docker-compose down
+```
+
+### Déploiement Manuel
+
+#### Backend
+```bash
+cd backend
 npm run build
+npm start
 ```
 
-### Serveur de Production
+#### Frontend
 ```bash
-npm run preview
+cd frontend
+npm run build
+# Servir les fichiers statiques avec nginx/apache
 ```
 
-### Variables d'Environnement de Production
-```env
-VITE_API_URL=https://api.cuiz.com
-VITE_WS_URL=wss://ws.cuiz.com
-NODE_ENV=production
-```
+## 📈 Monitoring
 
-## 📈 Monitoring et Analytics
+### Logs
+- **Backend** : Winston avec rotation des fichiers
+- **Frontend** : Console et service externe
 
-### Logs Système
-- **Logs utilisateur** (connexions, actions)
-- **Logs de sécurité** (tentatives d'accès)
-- **Logs de transaction** (dépôts, retraits)
-- **Logs système** (erreurs, performances)
+### Métriques
+- **Performance** : Temps de réponse API
+- **Erreurs** : Taux d'erreur par endpoint
+- **Utilisateurs** : Sessions actives, nouvelles inscriptions
+- **Transactions** : Volume, montants, succès/échecs
 
-### Rapports Admin
-- **Statistiques utilisateurs** (inscriptions, activité)
-- **Métriques financières** (dépôts, retraits, profits)
-- **Analytics de parrainage** (conversions, commissions)
-- **Exports** (PDF, Excel, CSV)
+## 🔒 Sécurité
 
-## 🔧 Maintenance
+### Backend
+- Validation des données avec Zod
+- Rate limiting
+- CORS configuré
+- Headers de sécurité (Helmet)
+- JWT avec refresh tokens
+- Hachage des mots de passe (bcrypt)
 
-### Mise à Jour des Dépendances
-```bash
-npm update
-npm audit fix
-```
-
-### Nettoyage du Cache
-```bash
-npm run clean
-```
-
-### Vérification du Code
-```bash
-npm run lint
-npm run type-check
-```
+### Frontend
+- Validation côté client
+- Protection XSS
+- Authentification JWT
+- Routes protégées
+- Sanitisation des données
 
 ## 🤝 Contribution
 
-### Guidelines
-1. **Fork** le projet
-2. **Créer** une branche feature (`git checkout -b feature/AmazingFeature`)
-3. **Commit** les changements (`git commit -m 'Add some AmazingFeature'`)
-4. **Push** vers la branche (`git push origin feature/AmazingFeature`)
-5. **Ouvrir** une Pull Request
+1. Fork le projet
+2. Créer une branche feature (`git checkout -b feature/AmazingFeature`)
+3. Commit les changements (`git commit -m 'Add some AmazingFeature'`)
+4. Push vers la branche (`git push origin feature/AmazingFeature`)
+5. Ouvrir une Pull Request
 
 ### Standards de Code
 - **TypeScript** strict mode
-- **ESLint** configuration
-- **Prettier** formatting
+- **ESLint** + **Prettier**
 - **Conventional Commits**
+- **Tests** pour les nouvelles fonctionnalités
 
 ## 📞 Support
 
-### Contact
-- **Email**: support@cuiz.com
-- **Téléphone**: +261 34 12 345 67
-- **WhatsApp**: +261 34 12 345 67
-
-### Documentation
-- **API Documentation**: `/docs/api`
-- **User Guide**: `/docs/user-guide`
-- **Admin Guide**: `/docs/admin-guide`
+- **Email** : support@cuiz.com
+- **WhatsApp** : +261 34 12 345 67
+- **Documentation** : [docs.cuiz.com](https://docs.cuiz.com)
 
 ## 📄 Licence
 
 Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
 
-## 🙏 Remerciements
+## 🔗 Liens Utiles
 
-- **React Team** pour l'excellent framework
-- **Tailwind CSS** pour le système de design
-- **Lucide** pour les icônes
-- **Vite** pour l'outil de build rapide
+- [Documentation Backend](backend/README.md)
+- [Documentation Frontend](frontend/README.md)
+- [API Documentation](backend/docs/api.md)
+- [Guide de Déploiement](docs/deployment.md)
 
 ---
 

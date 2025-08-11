@@ -1,0 +1,426 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User model
+model User {
+  id                String   @id @default(cuid())
+  firstName         String
+  lastName          String
+  phone             String   @unique
+  email             String?  @unique
+  referralCode      String   @unique @default(cuid())
+  referredBy        String?
+  status            UserStatus @default(ACTIVE)
+  isInvestor        Boolean  @default(false)
+  
+  // Balance
+  balanceAr         Float    @default(0)
+  balanceUsdt       Float    @default(0)
+  pointsBalance     Int      @default(0)
+  
+  // Statistics
+  totalInvested     Float    @default(0)
+  totalEarned       Float    @default(0)
+  totalWithdrawn    Float    @default(0)
+  
+  // Security
+  passwordHash      String
+  withdrawalPassword String?
+  twoFactorEnabled  Boolean  @default(false)
+  twoFactorSecret   String?
+  
+  // Preferences
+  language          Language @default(FR)
+  currency          Currency @default(AR)
+  emailNotifications Boolean @default(true)
+  smsNotifications  Boolean  @default(true)
+  pushNotifications Boolean  @default(true)
+  
+  // Profile
+  profileImage      String?
+  lastLoginAt       DateTime?
+  
+  // Timestamps
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  
+  // Relations
+  referredUsers     User[]   @relation("UserReferrals")
+  referrer          User?    @relation("UserReferrals", fields: [referredBy], references: [id])
+  
+  transactions      Transaction[]
+  investments       Investment[]
+  tasks            Task[]
+  taskExecutions   TaskExecution[]
+  commissions      Commission[]
+  fromCommissions  Commission[] @relation("CommissionFromUser")
+  notifications    Notification[]
+  
+
+  
+  @@map("users")
+}
+
+// Transaction model
+model Transaction {
+  id              String          @id @default(cuid())
+  userId          String
+  type            TransactionType
+  currency        Currency
+  amount          Float
+  status          TransactionStatus @default(PENDING)
+  
+  // Payment details
+  method          String?
+  proofImage      String?
+  reference       String?         @unique
+  description     String?
+  
+  // Approval details
+  approvedBy      String?
+  approvedAt      DateTime?
+  rejectionReason String?
+  rejectedBy      String?
+  rejectedAt      DateTime?
+  
+  // Timestamps
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  
+  // Relations
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  approver        Admin?          @relation("TransactionApprover", fields: [approvedBy], references: [id])
+  rejecter        Admin?          @relation("TransactionRejecter", fields: [rejectedBy], references: [id])
+  commissions     Commission[]
+  
+  @@map("transactions")
+}
+
+// Investment Plan model
+model InvestmentPlan {
+  id              String   @id @default(cuid())
+  name            String
+  description     String
+  minAmount       Float
+  maxAmount       Float
+  dailyReturn     Float
+  duration        Int      // in days
+  totalReturn     Float
+  features        String[] // JSON array
+  isPopular       Boolean  @default(false)
+  isRecommended   Boolean  @default(false)
+  status          PlanStatus @default(ACTIVE)
+  
+  // Timestamps
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  // Relations
+  investments     Investment[]
+  
+  @@map("investment_plans")
+}
+
+// Investment model
+model Investment {
+  id              String   @id @default(cuid())
+  userId          String
+  planId          String
+  amount          Float
+  dailyReturn     Float
+  totalReturn     Float
+  duration        Int      // in days
+  startDate       DateTime
+  endDate         DateTime
+  status          InvestmentStatus @default(ACTIVE)
+  totalEarned     Float    @default(0)
+  lastPayoutDate  DateTime?
+  
+  // Timestamps
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  // Relations
+  user            User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan            InvestmentPlan  @relation(fields: [planId], references: [id])
+  
+  @@map("investments")
+}
+
+// Task model
+model Task {
+  id              String      @id @default(cuid())
+  creatorId       String
+  title           String
+  description     String
+  type            TaskType
+  points          Int
+  requirements    String[]    // JSON array
+  status          TaskStatus  @default(ACTIVE)
+  maxExecutions   Int         @default(1)
+  currentExecutions Int        @default(0)
+  
+  // Timestamps
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  
+  // Relations
+  creator         User        @relation(fields: [creatorId], references: [id])
+  executions      TaskExecution[]
+  
+  @@map("tasks")
+}
+
+// Task Execution model
+model TaskExecution {
+  id              String          @id @default(cuid())
+  taskId          String
+  executorId      String
+  proofImage      String?
+  status          ExecutionStatus @default(PENDING)
+  approvedBy      String?
+  approvedAt      DateTime?
+  rejectionReason String?
+  rejectedBy      String?
+  rejectedAt      DateTime?
+  
+  // Timestamps
+  submittedAt     DateTime        @default(now())
+  reviewedAt      DateTime?
+  
+  // Relations
+  task            Task            @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  executor        User            @relation(fields: [executorId], references: [id])
+  approver        Admin?          @relation("TaskApprover", fields: [approvedBy], references: [id])
+  rejecter        Admin?          @relation("TaskRejecter", fields: [rejectedBy], references: [id])
+  
+  @@map("task_executions")
+}
+
+// Commission model
+model Commission {
+  id              String          @id @default(cuid())
+  userId          String
+  fromUserId      String
+  type            CommissionType
+  level           Int
+  percentage      Float
+  amount          Float
+  transactionId   String?
+  
+  // Timestamps
+  createdAt       DateTime        @default(now())
+  
+  // Relations
+  user            User            @relation(fields: [userId], references: [id])
+  fromUser        User            @relation("CommissionFromUser", fields: [fromUserId], references: [id])
+  transaction     Transaction?    @relation(fields: [transactionId], references: [id])
+  
+  @@map("commissions")
+}
+
+// Admin model
+model Admin {
+  id              String      @id @default(cuid())
+  username        String      @unique
+  email           String      @unique
+  passwordHash    String
+  role            AdminRole   @default(ADMIN)
+  permissions     String[]    // JSON array
+  lastLoginAt     DateTime?
+  
+  // Timestamps
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  
+  // Relations
+  logs            AdminLog[]
+  approvedTransactions Transaction[] @relation("TransactionApprover")
+  rejectedTransactions Transaction[] @relation("TransactionRejecter")
+  approvedTasks   TaskExecution[] @relation("TaskApprover")
+  rejectedTasks   TaskExecution[] @relation("TaskRejecter")
+  
+  @@map("admins")
+}
+
+// Admin Log model
+model AdminLog {
+  id              String   @id @default(cuid())
+  adminId         String
+  action          String
+  target          String
+  details         String
+  ipAddress       String
+  userAgent       String
+  
+  // Timestamps
+  createdAt       DateTime @default(now())
+  
+  // Relations
+  admin           Admin    @relation(fields: [adminId], references: [id])
+  
+  @@map("admin_logs")
+}
+
+// Notification model
+model Notification {
+  id              String          @id @default(cuid())
+  userId          String
+  title           String
+  message         String
+  type            NotificationType
+  status          NotificationStatus @default(UNREAD)
+  readAt          DateTime?
+  
+  // Timestamps
+  createdAt       DateTime        @default(now())
+  
+  // Relations
+  user            User            @relation(fields: [userId], references: [id])
+  
+  @@map("notifications")
+}
+
+// System Settings model
+model SystemSettings {
+  id              String   @id @default(cuid())
+  
+  // Currencies
+  currenciesAr    Boolean  @default(true)
+  currenciesUsdt  Boolean  @default(true)
+  
+  // Exchange rates
+  arToUsdtRate    Float    @default(0.0002)
+  usdtToArRate    Float    @default(5000)
+  pointsToArInvestor Float @default(100)
+  pointsToArNonInvestor Float @default(10)
+  
+  // Limits
+  minDepositAr    Float    @default(1000)
+  minDepositUsdt  Float    @default(1)
+  minWithdrawalAr Float    @default(5000)
+  minWithdrawalUsdt Float  @default(1)
+  withdrawalFee   Float    @default(0.1)
+  
+  // Validation
+  depositsValidation ValidationType @default(MANUAL)
+  withdrawalsValidation ValidationType @default(MANUAL)
+  pointsExchangeValidation ValidationType @default(MANUAL)
+  tasksValidation ValidationType @default(MANUAL)
+  
+  // Notifications
+  emailNotifications Boolean @default(true)
+  whatsappNotifications Boolean @default(true)
+  inAppNotifications Boolean @default(true)
+  
+  // Timestamps
+  updatedAt       DateTime @updatedAt
+  
+  @@map("system_settings")
+}
+
+// Enums
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  BANNED
+}
+
+enum Language {
+  FR
+  EN
+  MG
+}
+
+enum Currency {
+  AR
+  USDT
+  POINTS
+}
+
+enum TransactionType {
+  DEPOSIT
+  WITHDRAWAL
+  INVESTMENT
+  COMMISSION
+  BONUS
+  POINTS_EXCHANGE
+  POINTS_PURCHASE
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum PlanStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum InvestmentStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum TaskType {
+  SOCIAL_MEDIA
+  SURVEY
+  REFERRAL
+  CONTENT
+  OTHER
+}
+
+enum TaskStatus {
+  ACTIVE
+  INACTIVE
+  COMPLETED
+}
+
+enum ExecutionStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum CommissionType {
+  REFERRAL
+  TEAM
+  DAILY
+}
+
+enum AdminRole {
+  SUPER_ADMIN
+  ADMIN
+  MODERATOR
+}
+
+enum NotificationType {
+  SYSTEM
+  USER
+  TRANSACTION
+  SECURITY
+}
+
+enum NotificationStatus {
+  UNREAD
+  READ
+}
+
+enum ValidationType {
+  MANUAL
+  AUTOMATIC
+}
