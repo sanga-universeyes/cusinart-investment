@@ -88,6 +88,26 @@
     font-size: 0.875rem;
     line-height: 1.25rem;
   }
+  
+  .mobile-nav-spacing {
+    padding-bottom: 6rem;
+  }
+  
+  .mobile-card {
+    margin: 0.5rem;
+    padding: 1rem;
+  }
+  
+  .mobile-button {
+    min-height: 48px;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+  
+  .mobile-input {
+    padding: 0.875rem 1rem;
+    font-size: 1rem;
+  }
 }
 
 /* Touch improvements for mobile */
@@ -99,4 +119,103 @@
   .hover\:-translate-y-1:hover {
     transform: translateY(-0.25rem);
   }
+  
+  .mobile-touch-target {
+    min-height: 48px;
+    min-width: 48px;
+  }
+  
+  .mobile-spacing {
+    padding: 1rem;
+    margin: 0.5rem 0;
+  }
+}
+
+/* Enhanced responsive design */
+@media (max-width: 640px) {
+  .sm-grid-1 {
+    grid-template-columns: 1fr;
+  }
+  
+  .sm-text-center {
+    text-align: center;
+  }
+  
+  .sm-space-y-4 > * + * {
+    margin-top: 1rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .md-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .md-padding {
+    padding: 1.5rem;
+  }
+}
+
+/* Admin panel responsive */
+@media (max-width: 1024px) {
+  .admin-sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .admin-sidebar.open {
+    transform: translateX(0);
+  }
+  
+  .admin-content {
+    margin-left: 0;
+  }
+}
+
+/* Enhanced animations */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-up {
+  animation: slideInUp 0.5s ease-out;
+}
+
+.animate-slide-right {
+  animation: slideInRight 0.5s ease-out;
+}
+
+/* Enhanced button effects */
+.btn-3d {
+  transform: perspective(1px) translateZ(0);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
+}
+
+.btn-3d:hover {
+  transform: translateY(-2px) perspective(1px) translateZ(0);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-3d:active {
+  transform: translateY(0) perspective(1px) translateZ(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }

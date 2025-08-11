@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Play, Eye, Check, X, Clock, Award, Target } from 'lucide-react';
+import { Plus, Play, Eye, Check, X, Clock, Award, Target, Camera, Upload, Timer } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNotifications } from '../contexts/NotificationContext';
 import { Card } from '../components/ui/Card';
@@ -12,6 +12,7 @@ import toast from 'react-hot-toast';
 interface MicroTask {
   id: string;
   creatorId: string;
+  creatorName: string;
   title: string;
   description: string;
   url: string;
@@ -28,6 +29,7 @@ interface TaskExecution {
   id: string;
   taskId: string;
   executorId: string;
+  executorName: string;
   proofImage?: File;
   status: 'pending' | 'approved' | 'rejected';
   submittedAt: Date;
@@ -36,7 +38,7 @@ interface TaskExecution {
 export function Tasks() {
   const { user, updateUser } = useAuth();
   const { addNotification } = useNotifications();
-  const [activeTab, setActiveTab] = useState<'create' | 'execute' | 'validate'>('execute');
+  const [activeTab, setActiveTab] = useState<'execute' | 'create' | 'validate'>('execute');
   const [tasks, setTasks] = useState<MicroTask[]>([]);
   const [myTasks, setMyTasks] = useState<MicroTask[]>([]);
   const [executions, setExecutions] = useState<TaskExecution[]>([]);
@@ -55,6 +57,43 @@ export function Tasks() {
     description: '',
     validationType: 'manual' as 'automatic' | 'manual'
   });
+
+  // Mock data pour démonstration
+  useEffect(() => {
+    const mockTasks: MicroTask[] = [
+      {
+        id: 'TASK001',
+        creatorId: 'other_user',
+        creatorName: 'Marie Rabe',
+        title: 'Liker ma vidéo YouTube',
+        description: 'Regarder et liker ma vidéo sur les recettes malgaches',
+        url: 'https://youtube.com/watch?v=example1',
+        type: 'like',
+        pointsReward: 1,
+        maxExecutions: 50,
+        currentExecutions: 12,
+        validationType: 'manual',
+        status: 'active',
+        createdAt: new Date(2024, 11, 15)
+      },
+      {
+        id: 'TASK002',
+        creatorId: 'other_user2',
+        creatorName: 'Jean Rakoto',
+        title: 'S\'abonner à ma chaîne',
+        description: 'S\'abonner à ma chaîne de cuisine traditionnelle',
+        url: 'https://youtube.com/channel/example2',
+        type: 'subscribe',
+        pointsReward: 2,
+        maxExecutions: 30,
+        currentExecutions: 8,
+        validationType: 'automatic',
+        status: 'active',
+        createdAt: new Date(2024, 11, 16)
+      }
+    ];
+    setTasks(mockTasks);
+  }, []);
 
   if (!user) return null;
 
@@ -84,8 +123,9 @@ export function Tasks() {
 
     try {
       const newTask: MicroTask = {
-        id: Date.now().toString(),
+        id: `TASK${Date.now()}`,
         creatorId: user.id,
+        creatorName: `${user.firstName} ${user.lastName}`,
         title: taskForm.title,
         description: taskForm.description,
         url: taskForm.url,
@@ -153,9 +193,10 @@ export function Tasks() {
 
     try {
       const execution: TaskExecution = {
-        id: Date.now().toString(),
+        id: `EXEC${Date.now()}`,
         taskId: currentTask.id,
         executorId: user.id,
+        executorName: `${user.firstName} ${user.lastName}`,
         proofImage,
         status: currentTask.validationType === 'automatic' ? 'approved' : 'pending',
         submittedAt: new Date()
@@ -178,6 +219,15 @@ export function Tasks() {
 
         toast.success(`+${currentTask.pointsReward} points gagnés !`);
       } else {
+        addNotification({
+          type: 'points',
+          title: 'Mission soumise',
+          message: `Mission "${currentTask.title}" en attente de validation`,
+          status: 'pending',
+          amount: currentTask.pointsReward,
+          currency: 'points'
+        });
+        
         toast.success('Mission soumise pour validation');
       }
 
@@ -194,7 +244,7 @@ export function Tasks() {
 
   const handleValidateExecution = (executionId: string, approved: boolean) => {
     const execution = executions.find(e => e.id === executionId);
-    const task = tasks.find(t => t.id === execution?.taskId);
+    const task = myTasks.find(t => t.id === execution?.taskId);
     
     if (!execution || !task) return;
 
@@ -207,8 +257,7 @@ export function Tasks() {
     );
 
     if (approved) {
-      // Créditer les points à l'exécutant (simulation)
-      toast.success(`Mission validée : +${task.pointsReward} points`);
+      toast.success(`Mission validée : +${task.pointsReward} points pour ${execution.executorName}`);
     } else {
       toast.success('Mission rejetée');
     }
@@ -225,56 +274,74 @@ export function Tasks() {
     return labels[type];
   };
 
+  const myExecutions = executions.filter(e => e.executorId === user.id);
+  const pendingValidations = executions.filter(e => 
+    e.status === 'pending' && 
+    myTasks.some(t => t.id === e.taskId)
+  );
+
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="space-y-6 pb-24 lg:pb-6">
       <div className="text-center">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Micro-tâches</h1>
         <p className="text-gray-600">Créez des missions ou gagnez des points</p>
       </div>
 
       {/* Statistiques */}
-      <div className="grid md:grid-cols-3 gap-6">
-        <Card className="text-center">
-          <Award className="h-8 w-8 text-yellow-500 mx-auto mb-2" />
-          <p className="text-2xl font-bold text-gray-900">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <Card className="text-center bg-gradient-to-br from-yellow-50 to-yellow-100 border-yellow-200">
+          <Award className="h-8 w-8 text-yellow-600 mx-auto mb-2" />
+          <p className="text-xl md:text-2xl font-bold text-yellow-900">
             {formatCurrency(user.pointsBalance, 'points')}
           </p>
-          <p className="text-sm text-gray-600">Mes points</p>
+          <p className="text-sm text-yellow-700">Mes points</p>
         </Card>
 
-        <Card className="text-center">
-          <Target className="h-8 w-8 text-blue-500 mx-auto mb-2" />
-          <p className="text-2xl font-bold text-gray-900">{myTasks.length}</p>
-          <p className="text-sm text-gray-600">Missions créées</p>
+        <Card className="text-center bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+          <Target className="h-8 w-8 text-blue-600 mx-auto mb-2" />
+          <p className="text-xl md:text-2xl font-bold text-blue-900">{myTasks.length}</p>
+          <p className="text-sm text-blue-700">Missions créées</p>
         </Card>
 
-        <Card className="text-center">
-          <Check className="h-8 w-8 text-green-500 mx-auto mb-2" />
-          <p className="text-2xl font-bold text-gray-900">
-            {executions.filter(e => e.status === 'approved').length}
+        <Card className="text-center bg-gradient-to-br from-green-50 to-green-100 border-green-200">
+          <Check className="h-8 w-8 text-green-600 mx-auto mb-2" />
+          <p className="text-xl md:text-2xl font-bold text-green-900">
+            {myExecutions.filter(e => e.status === 'approved').length}
           </p>
-          <p className="text-sm text-gray-600">Missions terminées</p>
+          <p className="text-sm text-green-700">Terminées</p>
+        </Card>
+
+        <Card className="text-center bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200">
+          <Eye className="h-8 w-8 text-purple-600 mx-auto mb-2" />
+          <p className="text-xl md:text-2xl font-bold text-purple-900">{pendingValidations.length}</p>
+          <p className="text-sm text-purple-700">À valider</p>
         </Card>
       </div>
 
       {/* Navigation par onglets */}
-      <div className="flex space-x-1 bg-gray-100 rounded-lg p-1">
+      <div className="flex space-x-1 bg-gray-100 rounded-xl p-1 shadow-inner">
         {[
-          { key: 'execute', label: 'Faire des missions', icon: Play },
-          { key: 'create', label: 'Créer une mission', icon: Plus },
-          { key: 'validate', label: 'Valider missions', icon: Eye }
+          { key: 'execute', label: 'Faire des missions', icon: Play, count: tasks.filter(t => t.status === 'active' && t.creatorId !== user.id).length },
+          { key: 'create', label: 'Créer une mission', icon: Plus, count: myTasks.length },
+          { key: 'validate', label: 'Valider missions', icon: Eye, count: pendingValidations.length }
         ].map(tab => (
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key as any)}
-            className={`flex-1 flex items-center justify-center space-x-2 py-3 px-4 rounded-md text-sm font-medium transition-all ${
+            className={`flex-1 flex items-center justify-center space-x-2 py-3 px-2 md:px-4 rounded-lg text-sm font-medium transition-all ${
               activeTab === tab.key
-                ? 'bg-white text-[#006B76] shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-white text-[#006B76] shadow-lg transform scale-105'
+                : 'text-gray-600 hover:text-gray-900 hover:bg-white/50'
             }`}
           >
             <tab.icon className="h-4 w-4" />
-            <span>{tab.label}</span>
+            <span className="hidden sm:inline">{tab.label}</span>
+            <span className="sm:hidden">{tab.label.split(' ')[0]}</span>
+            {tab.count > 0 && (
+              <span className="bg-red-500 text-white text-xs rounded-full px-2 py-0.5 min-w-[20px]">
+                {tab.count}
+              </span>
+            )}
           </button>
         ))}
       </div>
@@ -283,37 +350,63 @@ export function Tasks() {
       {activeTab === 'execute' && (
         <div className="space-y-6">
           {isExecuting && currentTask ? (
-            <Card>
-              <div className="text-center space-y-4">
-                <div className="w-16 h-16 bg-[#006B76] text-white rounded-full flex items-center justify-center mx-auto">
+            <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200">
+              <div className="text-center space-y-6">
+                <div className="w-20 h-20 bg-gradient-to-br from-[#006B76] to-[#006B76]/80 text-white rounded-full flex items-center justify-center mx-auto shadow-xl">
                   <span className="text-2xl font-bold">{timer}</span>
                 </div>
                 
-                <h3 className="text-lg font-semibold">{currentTask.title}</h3>
-                <p className="text-gray-600">{currentTask.description}</p>
+                <div>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">{currentTask.title}</h3>
+                  <p className="text-gray-600">{currentTask.description}</p>
+                  <div className="inline-flex items-center px-3 py-1 rounded-full bg-green-100 text-green-800 text-sm font-medium mt-2">
+                    +{currentTask.pointsReward} points
+                  </div>
+                </div>
                 
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="text-sm text-gray-700 mb-2">Lien de la mission :</p>
+                <div className="bg-white p-4 rounded-xl border border-blue-200">
+                  <p className="text-sm text-gray-700 mb-2 font-medium">Lien de la mission :</p>
                   <a 
                     href={currentTask.url} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-blue-600 hover:underline break-all"
+                    className="text-blue-600 hover:underline break-all text-sm bg-blue-50 p-2 rounded-lg block"
                   >
                     {currentTask.url}
                   </a>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Téléverser la capture d'écran
+                <div className="space-y-3">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Téléverser la capture d'écran de preuve
                   </label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => setProofImage(e.target.files?.[0] || null)}
-                    className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#006B76] file:text-white hover:file:bg-[#006B76]/80"
-                  />
+                  <div className="border-2 border-dashed border-blue-300 rounded-xl p-6 text-center hover:border-blue-400 transition-colors bg-white">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => setProofImage(e.target.files?.[0] || null)}
+                      className="hidden"
+                      id="proof-upload"
+                    />
+                    <label htmlFor="proof-upload" className="cursor-pointer">
+                      {proofImage ? (
+                        <div className="flex items-center justify-center space-x-2 text-green-600">
+                          <Check className="h-6 w-6" />
+                          <span className="font-medium">Image ajoutée: {proofImage.name}</span>
+                        </div>
+                      ) : (
+                        <div className="space-y-3">
+                          <Camera className="h-12 w-12 text-blue-400 mx-auto" />
+                          <p className="text-blue-600 font-medium">
+                            Cliquer pour téléverser la capture
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            PNG, JPG jusqu'à 5MB
+                          </p>
+                        </div>
+                      )}
+                    </label>
+                  </div>
                 </div>
 
                 <div className="flex space-x-4">
@@ -321,8 +414,14 @@ export function Tasks() {
                     onClick={handleSubmitExecution}
                     disabled={timer > 0 || !proofImage}
                     className="flex-1"
+                    size="lg"
                   >
-                    {timer > 0 ? `Attendre ${timer}s` : 'Valider'}
+                    {timer > 0 ? (
+                      <div className="flex items-center space-x-2">
+                        <Timer className="h-4 w-4" />
+                        <span>Attendre {timer}s</span>
+                      </div>
+                    ) : 'Valider la mission'}
                   </Button>
                   <Button
                     variant="outline"
@@ -333,6 +432,7 @@ export function Tasks() {
                       setProofImage(null);
                     }}
                     className="flex-1"
+                    size="lg"
                   >
                     Annuler
                   </Button>
@@ -340,36 +440,72 @@ export function Tasks() {
               </div>
             </Card>
           ) : (
-            <div className="grid md:grid-cols-2 gap-6">
-              {tasks.filter(t => t.status === 'active' && t.creatorId !== user.id).map(task => (
-                <Card key={task.id} hover>
-                  <div className="space-y-3">
-                    <div className="flex items-start justify-between">
-                      <h3 className="font-semibold text-gray-900">{task.title}</h3>
-                      <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
-                        +{task.pointsReward} pts
-                      </span>
+            <div className="space-y-4">
+              <div className="text-center">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Missions Disponibles</h3>
+                <p className="text-gray-600">Exécutez des missions et gagnez des points</p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {tasks.filter(t => t.status === 'active' && t.creatorId !== user.id).map(task => (
+                  <Card key={task.id} hover className="bg-gradient-to-br from-white to-gray-50">
+                    <div className="space-y-4">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-900 mb-1">{task.title}</h3>
+                          <p className="text-sm text-gray-600 mb-2">{task.description}</p>
+                          <p className="text-xs text-gray-500">Par {task.creatorName}</p>
+                        </div>
+                        <div className="flex flex-col items-end space-y-2">
+                          <span className="bg-green-100 text-green-800 text-sm px-3 py-1 rounded-full font-medium">
+                            +{task.pointsReward} pts
+                          </span>
+                          <span className={`text-xs px-2 py-1 rounded-full ${
+                            task.validationType === 'automatic' 
+                              ? 'bg-blue-100 text-blue-800' 
+                              : 'bg-yellow-100 text-yellow-800'
+                          }`}>
+                            {task.validationType === 'automatic' ? 'Auto' : 'Manuel'}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-gray-500">Type: {getTaskTypeLabel(task.type)}</span>
+                        <div className="flex items-center space-x-2">
+                          <div className="w-full bg-gray-200 rounded-full h-2 w-20">
+                            <div 
+                              className="bg-blue-500 h-2 rounded-full transition-all" 
+                              style={{ width: `${(task.currentExecutions / task.maxExecutions) * 100}%` }}
+                            ></div>
+                          </div>
+                          <span className="text-xs text-gray-500 whitespace-nowrap">
+                            {task.currentExecutions}/{task.maxExecutions}
+                          </span>
+                        </div>
+                      </div>
+                      
+                      <Button
+                        onClick={() => handleExecuteTask(task)}
+                        size="sm"
+                        className="w-full"
+                        disabled={task.currentExecutions >= task.maxExecutions}
+                      >
+                        <Play className="mr-2 h-4 w-4" />
+                        {task.currentExecutions >= task.maxExecutions ? 'Terminé' : 'Exécuter'}
+                      </Button>
                     </div>
-                    
-                    <p className="text-sm text-gray-600">{task.description}</p>
-                    
-                    <div className="flex items-center justify-between text-sm text-gray-500">
-                      <span>Type: {getTaskTypeLabel(task.type)}</span>
-                      <span>{task.currentExecutions}/{task.maxExecutions}</span>
-                    </div>
-                    
-                    <Button
-                      onClick={() => handleExecuteTask(task)}
-                      size="sm"
-                      className="w-full"
-                      disabled={task.currentExecutions >= task.maxExecutions}
-                    >
-                      <Play className="mr-2 h-4 w-4" />
-                      Exécuter
-                    </Button>
-                  </div>
-                </Card>
-              ))}
+                  </Card>
+                ))}
+              </div>
+
+              {tasks.filter(t => t.status === 'active' && t.creatorId !== user.id).length === 0 && (
+                <div className="text-center py-12 text-gray-500">
+                  <Target className="h-16 w-16 mx-auto mb-4 opacity-30" />
+                  <p className="text-lg font-medium">Aucune mission disponible</p>
+                  <p className="text-sm mt-2">Revenez plus tard ou créez vos propres missions</p>
+                </div>
+              )}
             </div>
           )}
         </div>
@@ -379,13 +515,13 @@ export function Tasks() {
         <Card>
           <div className="space-y-6">
             <div className="text-center">
-              <h3 className="text-lg font-semibold text-gray-900 mb-2">Créer une mission</h3>
-              <p className="text-sm text-gray-600">
-                Points disponibles: {formatCurrency(user.pointsBalance, 'points')}
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">Créer une Mission</h3>
+              <p className="text-gray-600">
+                Points disponibles: <span className="font-bold text-[#006B76]">{formatCurrency(user.pointsBalance, 'points')}</span>
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Input
                 label="Titre de la mission"
                 value={taskForm.title}
@@ -400,13 +536,13 @@ export function Tasks() {
                 <select
                   value={taskForm.type}
                   onChange={(e) => setTaskForm({...taskForm, type: e.target.value as any})}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006B76]/50 focus:border-[#006B76]"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006B76]/50 focus:border-[#006B76] bg-white"
                 >
-                  <option value="like">Like</option>
-                  <option value="subscribe">S'abonner</option>
-                  <option value="watch">Regarder une vidéo</option>
-                  <option value="follow">Suivre une page</option>
-                  <option value="register">S'inscrire sur un site</option>
+                  <option value="like">👍 Like</option>
+                  <option value="subscribe">📺 S'abonner</option>
+                  <option value="watch">▶️ Regarder une vidéo</option>
+                  <option value="follow">👥 Suivre une page</option>
+                  <option value="register">📝 S'inscrire sur un site</option>
                 </select>
               </div>
             </div>
@@ -418,7 +554,7 @@ export function Tasks() {
               placeholder="https://youtube.com/watch?v=..."
             />
 
-            <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Input
                 label="Nombre d'exécutants souhaités"
                 type="number"
@@ -444,44 +580,58 @@ export function Tasks() {
                 value={taskForm.description}
                 onChange={(e) => setTaskForm({...taskForm, description: e.target.value})}
                 rows={3}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006B76]/50 focus:border-[#006B76]"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#006B76]/50 focus:border-[#006B76] resize-none"
                 placeholder="Décrivez ce que les utilisateurs doivent faire..."
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-gray-700 mb-3">
                 Type de validation
               </label>
-              <div className="flex space-x-4">
-                <label className="flex items-center">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <label className="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
                   <input
                     type="radio"
                     value="manual"
                     checked={taskForm.validationType === 'manual'}
                     onChange={(e) => setTaskForm({...taskForm, validationType: e.target.value as any})}
-                    className="mr-2"
+                    className="mr-3"
                   />
-                  Validation manuelle
+                  <div>
+                    <p className="font-medium text-gray-900">Validation manuelle</p>
+                    <p className="text-sm text-gray-600">Vous validez chaque exécution</p>
+                  </div>
                 </label>
-                <label className="flex items-center">
+                <label className="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
                   <input
                     type="radio"
                     value="automatic"
                     checked={taskForm.validationType === 'automatic'}
                     onChange={(e) => setTaskForm({...taskForm, validationType: e.target.value as any})}
-                    className="mr-2"
+                    className="mr-3"
                   />
-                  Validation automatique
+                  <div>
+                    <p className="font-medium text-gray-900">Validation automatique</p>
+                    <p className="text-sm text-gray-600">Points crédités immédiatement</p>
+                  </div>
                 </label>
               </div>
             </div>
 
             {taskForm.executors && taskForm.pointsReward && (
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                <p className="text-sm text-yellow-800">
-                  <strong>Coût total:</strong> {parseInt(taskForm.executors || '0') * parseInt(taskForm.pointsReward || '0')} points
-                </p>
+              <div className="bg-gradient-to-r from-yellow-50 to-yellow-100 border border-yellow-200 rounded-xl p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-medium text-yellow-900">Coût total de la mission</p>
+                    <p className="text-sm text-yellow-700">
+                      {taskForm.executors} exécutants × {taskForm.pointsReward} points
+                    </p>
+                  </div>
+                  <p className="text-2xl font-bold text-yellow-800">
+                    {parseInt(taskForm.executors || '0') * parseInt(taskForm.pointsReward || '0')} points
+                  </p>
+                </div>
               </div>
             )}
 
@@ -489,8 +639,10 @@ export function Tasks() {
               <Button
                 onClick={handleCreateTask}
                 className="flex-1"
+                size="lg"
                 disabled={!taskForm.title || !taskForm.url || !taskForm.executors || !taskForm.pointsReward}
               >
+                <Plus className="mr-2 h-5 w-5" />
                 Créer la mission
               </Button>
               <Button
@@ -505,6 +657,7 @@ export function Tasks() {
                   validationType: 'manual'
                 })}
                 className="flex-1"
+                size="lg"
               >
                 Réinitialiser
               </Button>
@@ -516,58 +669,121 @@ export function Tasks() {
       {activeTab === 'validate' && (
         <div className="space-y-6">
           <div className="text-center">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Missions à valider</h3>
-            <p className="text-sm text-gray-600">
-              {executions.filter(e => e.status === 'pending').length} missions en attente
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Missions à Valider</h3>
+            <p className="text-gray-600">
+              {pendingValidations.length} mission(s) en attente de votre validation
             </p>
           </div>
 
           <div className="space-y-4">
-            {executions
-              .filter(e => e.status === 'pending')
-              .map(execution => {
-                const task = tasks.find(t => t.id === execution.taskId);
-                if (!task) return null;
+            {pendingValidations.map(execution => {
+              const task = myTasks.find(t => t.id === execution.taskId);
+              if (!task) return null;
 
-                return (
-                  <Card key={execution.id}>
+              return (
+                <Card key={execution.id} className="bg-gradient-to-r from-yellow-50 to-yellow-100 border-yellow-200">
+                  <div className="space-y-4">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <h4 className="font-semibold text-gray-900">{task.title}</h4>
-                        <p className="text-sm text-gray-600 mt-1">{task.description}</p>
-                        <p className="text-xs text-gray-500 mt-2">
-                          Soumis le {execution.submittedAt.toLocaleDateString('fr-FR')}
+                        <h4 className="font-semibold text-gray-900 mb-1">{task.title}</h4>
+                        <p className="text-sm text-gray-600 mb-2">{task.description}</p>
+                        <div className="flex items-center space-x-4 text-sm text-gray-500">
+                          <span>Exécutant: {execution.executorName}</span>
+                          <span>Récompense: {task.pointsReward} points</span>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xs text-gray-500">
+                          {execution.submittedAt.toLocaleDateString('fr-FR')}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {execution.submittedAt.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
                         </p>
                       </div>
-                      
-                      <div className="flex items-center space-x-2 ml-4">
-                        <Button
-                          size="sm"
-                          onClick={() => handleValidateExecution(execution.id, true)}
-                        >
-                          <Check className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handleValidateExecution(execution.id, false)}
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
-                      </div>
                     </div>
-                  </Card>
-                );
-              })}
+                    
+                    {execution.proofImage && (
+                      <div className="bg-white p-3 rounded-lg border border-yellow-200">
+                        <p className="text-sm text-gray-700 mb-2">Preuve soumise:</p>
+                        <div className="bg-gray-100 p-4 rounded-lg text-center">
+                          <Camera className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+                          <p className="text-sm text-gray-600">{execution.proofImage.name}</p>
+                        </div>
+                      </div>
+                    )}
+                    
+                    <div className="flex space-x-3">
+                      <Button
+                        onClick={() => handleValidateExecution(execution.id, true)}
+                        className="flex-1 bg-green-600 hover:bg-green-700"
+                        size="lg"
+                      >
+                        <Check className="mr-2 h-5 w-5" />
+                        Valider
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={() => handleValidateExecution(execution.id, false)}
+                        className="flex-1 border-red-300 text-red-600 hover:bg-red-50"
+                        size="lg"
+                      >
+                        <X className="mr-2 h-5 w-5" />
+                        Rejeter
+                      </Button>
+                    </div>
+                  </div>
+                </Card>
+              );
+            })}
 
-            {executions.filter(e => e.status === 'pending').length === 0 && (
+            {pendingValidations.length === 0 && (
               <div className="text-center py-12 text-gray-500">
-                <Clock className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                <p>Aucune mission en attente de validation</p>
+                <Clock className="h-16 w-16 mx-auto mb-4 opacity-30" />
+                <p className="text-lg font-medium">Aucune mission en attente</p>
+                <p className="text-sm mt-2">Les nouvelles soumissions apparaîtront ici</p>
               </div>
             )}
           </div>
         </div>
+      )}
+
+      {/* Mes missions créées */}
+      {myTasks.length > 0 && (
+        <Card>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-900 flex items-center">
+              <Target className="mr-2 h-5 w-5 text-blue-500" />
+              Mes Missions Créées
+            </h3>
+            <span className="text-sm text-gray-500">{myTasks.length} mission(s)</span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {myTasks.map(task => (
+              <div key={task.id} className="p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border border-blue-200">
+                <div className="flex items-start justify-between mb-3">
+                  <h4 className="font-medium text-blue-900">{task.title}</h4>
+                  <span className={`text-xs px-2 py-1 rounded-full ${
+                    task.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'
+                  }`}>
+                    {task.status === 'active' ? 'Active' : 'Inactive'}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-blue-700">Progression:</span>
+                  <span className="font-medium text-blue-900">
+                    {task.currentExecutions}/{task.maxExecutions}
+                  </span>
+                </div>
+                <div className="w-full bg-blue-200 rounded-full h-2 mt-2">
+                  <div 
+                    className="bg-blue-600 h-2 rounded-full transition-all" 
+                    style={{ width: `${(task.currentExecutions / task.maxExecutions) * 100}%` }}
+                  ></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
       )}
     </div>
   );
